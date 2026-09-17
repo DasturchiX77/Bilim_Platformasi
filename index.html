@@ -338,10 +338,57 @@
   .hist-row{
     display:flex;justify-content:space-between;align-items:center;
     background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);
-    padding:14px 18px;margin-bottom:10px;font-size:13.5px;
+    padding:14px 18px;margin-bottom:10px;font-size:13.5px;cursor:pointer;
   }
+  .hist-row:hover{border-color:var(--accent);}
   .hist-row .t{font-weight:600;}
   .hist-row .d{color:var(--ink-soft);font-size:12.5px;}
+
+  /* ---------- AI assistant ---------- */
+  .ai-fab{
+    position:fixed;right:22px;bottom:22px;z-index:60;
+    width:54px;height:54px;border-radius:50%;
+    background:var(--accent);color:var(--accent-ink);border:none;
+    font-size:22px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 14px rgba(0,0,0,.18);
+  }
+  .ai-fab:hover{filter:brightness(1.05);}
+  .ai-panel{
+    position:fixed;right:22px;bottom:88px;z-index:60;
+    width:350px;max-width:calc(100vw - 32px);
+    max-height:min(560px, calc(100vh - 130px));
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+  .ai-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface-2);
+  }
+  .ai-head .t{display:flex;align-items:center;gap:8px;font-family:'Fraunces',serif;font-weight:600;font-size:15.5px;}
+  .ai-close{background:none;border:none;color:var(--ink-soft);font-size:18px;cursor:pointer;}
+  .ai-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+  .ai-msg{max-width:88%;padding:9px 12px;border-radius:12px;font-size:13.5px;line-height:1.5;white-space:pre-wrap;}
+  .ai-msg.user{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border-radius:12px 12px 2px 12px;}
+  .ai-msg.assistant{align-self:flex-start;background:var(--surface-2);color:var(--ink);border-radius:12px 12px 12px 2px;}
+  .ai-msg.note{align-self:center;color:var(--ink-soft);font-size:12px;background:none;}
+  .ai-inputrow{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--border);}
+  .ai-inputrow textarea{
+    flex:1;resize:none;border:1px solid var(--border);border-radius:var(--radius-s);
+    padding:9px 10px;font-size:13.5px;background:var(--bg);color:var(--ink);font-family:inherit;
+    max-height:80px;
+  }
+  .ai-send{
+    background:var(--accent);color:var(--accent-ink);border:none;border-radius:var(--radius-s);
+    width:38px;flex-shrink:0;font-size:16px;
+  }
+  .ai-send:disabled{opacity:.5;}
+  .ai-helpbtn{
+    background:none;border:1px solid var(--border);color:var(--accent-2);
+    font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:20px;margin-top:10px;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .ai-helpbtn:hover{border-color:var(--accent-2);}
 
   @media(max-width:560px){
     .stat-grid{grid-template-columns:1fr 1fr;}
@@ -358,9 +405,23 @@
   </div>
   <button class="sb-item" data-nav="home">🏛️&nbsp;&nbsp;Bo'limlar</button>
   <button class="sb-item" data-nav="history">📝&nbsp;&nbsp;Testlarim</button>
+  <button class="sb-item" data-nav="profile">👤&nbsp;&nbsp;Profil</button>
   <button class="sb-item" data-nav="contact">✉️&nbsp;&nbsp;Bog'lanish</button>
   <button class="sb-item" data-nav="about">ℹ️&nbsp;&nbsp;Biz haqimizda</button>
   <button class="sb-item logout" id="logoutBtn">↩︎&nbsp;&nbsp;Chiqish</button>
+</div>
+
+<button class="ai-fab hidden" id="aiFab" aria-label="AI Yordamchi">🤖</button>
+<div class="ai-panel hidden" id="aiPanel">
+  <div class="ai-head">
+    <div class="t">🤖 AI Yordamchi</div>
+    <button class="ai-close" id="aiCloseBtn">✕</button>
+  </div>
+  <div class="ai-body" id="aiBody"></div>
+  <div class="ai-inputrow">
+    <textarea id="aiInput" rows="1" placeholder="Savolingizni yozing..."></textarea>
+    <button class="ai-send" id="aiSendBtn">➤</button>
+  </div>
 </div>
 
 <!-- ================= AUTH ================= -->
@@ -520,6 +581,37 @@
     <p id="historyEmpty" style="color:var(--ink-soft);font-size:14px;">Hali hech qanday test topshirilmagan.</p>
   </div>
 
+  <!-- HISTORY DETAIL -->
+  <div class="screen hidden" id="view-history-detail">
+    <div id="histDetailHeadInfo" style="margin-bottom:18px;">
+      <h1 style="font-size:24px;" id="histDetailTitle">Test natijasi</h1>
+      <p style="color:var(--ink-soft);font-size:13.5px;margin-top:6px;" id="histDetailMeta"></p>
+    </div>
+    <div class="stat-grid" id="histDetailStats"></div>
+    <h2 class="review-title">Savollar tahlili</h2>
+    <div id="histReviewList"></div>
+    <button class="btn btn-outline" data-nav="history" style="margin-top:6px;">← Orqaga</button>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="screen hidden" id="view-profile">
+    <button class="backlink" data-nav="home">← Bosh menyu</button>
+    <h1 style="font-size:24px;margin-bottom:18px;">Profil</h1>
+
+    <div class="stat-grid" id="profileStats" style="margin-bottom:22px;"></div>
+
+    <div class="authcard" style="max-width:480px;padding:26px 26px 24px;">
+      <div class="error-msg hidden" id="profileError"></div>
+      <div class="error-msg hidden" id="profileSuccess" style="background:rgba(47,123,110,.1);color:var(--accent-2);border-color:rgba(47,123,110,.3);"></div>
+      <div class="field"><label>Ism</label><input type="text" id="profIsm"></div>
+      <div class="field"><label>Familiya</label><input type="text" id="profFamiliya"></div>
+      <div class="field"><label>Telefon raqam</label><input type="text" id="profPhone"></div>
+      <div class="field"><label>Email</label><input type="email" id="profEmail"></div>
+      <div class="field"><label>Yangi parol (o'zgartirmasangiz bo'sh qoldiring)</label><input type="password" id="profPass" placeholder="••••••"></div>
+      <button class="btn btn-primary btn-block" id="saveProfileBtn">Saqlash</button>
+    </div>
+  </div>
+
   <!-- CONTACT -->
   <div class="screen hidden" id="view-contact">
     <button class="backlink" data-nav="home">← Bosh menyu</button>
@@ -591,6 +683,129 @@
       applyTheme(next);
       try{ localStorage.setItem('bm_theme', next); }catch(e){}
     });
+  }
+
+  /* ---------------- AI Yordamchi ---------------- */
+  let sampleFn = null;
+  let aiTurns = [];
+  let aiBusy = false;
+  const AI_INSTRUCTIONS = "Sen 'Bilim Maydoni' ta'lim platformasidagi matematika bo'yicha do'stona AI-repetitorsiz. Faqat o'zbek tilida javob ber. Javoblaring qisqa, aniq va tushunarli bo'lsin (odatda 2-6 gap), zarur bo'lsa qadamlarga bo'lib tushuntir. O'quvchini xijolatga qo'ymay, iliq va rag'batlantiruvchi ohangda gapir. Agar savol matematikaga aloqador bo'lmasa ham, iloji boricha foydali va qisqa javob ber.";
+
+  (async function initAI(){
+    try{
+      sampleFn = await claude.use('sample');
+    }catch(e){ sampleFn = null; }
+    if(sampleFn){
+      const curView = views.find(v=>!document.getElementById('view-'+v).classList.contains('hidden'));
+      const appVisible = !document.getElementById('screen-app').classList.contains('hidden');
+      if(appVisible && curView && curView!=='test'){
+        document.getElementById('aiFab').classList.remove('hidden');
+      }
+    }
+  })();
+
+  const aiFab = document.getElementById('aiFab');
+  const aiPanel = document.getElementById('aiPanel');
+  const aiBody = document.getElementById('aiBody');
+  const aiInput = document.getElementById('aiInput');
+  const aiSendBtn = document.getElementById('aiSendBtn');
+
+  function resetAIChat(){
+    aiTurns = [{role:'user', content: AI_INSTRUCTIONS}];
+    aiBody.innerHTML = '';
+  }
+
+  function addAIBubble(role, text){
+    const div = document.createElement('div');
+    div.className = 'ai-msg ' + role;
+    div.textContent = text;
+    aiBody.appendChild(div);
+    aiBody.scrollTop = aiBody.scrollHeight;
+    return div;
+  }
+
+  function addAINote(text){
+    const div = document.createElement('div');
+    div.className = 'ai-msg note';
+    div.textContent = text;
+    aiBody.appendChild(div);
+    aiBody.scrollTop = aiBody.scrollHeight;
+  }
+
+  function openAIChat(){
+    if(!sampleFn){ alert("AI yordamchi hozircha mavjud emas."); return; }
+    if(aiTurns.length===0){
+      resetAIChat();
+      addAINote("Salom! Men AI-yordamchiman. Matematikaga oid savolingizni yozing.");
+    }
+    aiPanel.classList.remove('hidden');
+    aiInput.focus();
+  }
+
+  function closeAIChat(){
+    aiPanel.classList.add('hidden');
+  }
+
+  function openAIChatWithContext(q, answered, isCorrect, userAnsText, correctAnsText){
+    if(!sampleFn){ alert("AI yordamchi hozircha mavjud emas."); return; }
+    resetAIChat();
+    aiPanel.classList.remove('hidden');
+    let ctxLine;
+    if(!answered) ctxLine = `O'quvchi bu savolga javob belgilamagan.`;
+    else if(isCorrect) ctxLine = `O'quvchi "${userAnsText}" javobini belgilagan va bu to'g'ri.`;
+    else ctxLine = `O'quvchi "${userAnsText}" javobini belgilagan, lekin bu noto'g'ri. To'g'ri javob: "${correctAnsText}".`;
+    const prompt = `Quyidagi matematika savoli haqida gaplashamiz:\n"${q.text}"\n${ctxLine}\nMavjud yechim: ${q.solution}\n\nO'quvchiga shu savolni yana ham sodda va tushunarli qilib, boshqacha so'zlar bilan tushuntirib ber, xatosi (agar bo'lsa) qayerda ekanini ko'rsat.`;
+    sendAIMessage(prompt, true);
+  }
+
+  aiFab.addEventListener('click', openAIChat);
+  document.getElementById('aiCloseBtn').addEventListener('click', closeAIChat);
+
+  function autoGrow(){
+    aiInput.style.height='auto';
+    aiInput.style.height = Math.min(aiInput.scrollHeight,80)+'px';
+  }
+  aiInput.addEventListener('input', autoGrow);
+  aiInput.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); triggerSend(); }
+  });
+  aiSendBtn.addEventListener('click', triggerSend);
+
+  function triggerSend(){
+    const text = aiInput.value.trim();
+    if(!text || aiBusy) return;
+    aiInput.value=''; autoGrow();
+    sendAIMessage(text, false);
+  }
+
+  async function sendAIMessage(userText, isAutoContext){
+    if(!sampleFn) return;
+    if(!isAutoContext) addAIBubble('user', userText);
+    aiTurns.push({role:'user', content: userText});
+    aiBusy = true;
+    aiSendBtn.disabled = true;
+    const bubble = addAIBubble('assistant', "Yozayapti...");
+    try{
+      const res = await sampleFn(aiTurns, {
+        modelTier:'quick',
+        cache:false,
+        onText: ({text})=>{ bubble.textContent = text; aiBody.scrollTop = aiBody.scrollHeight; }
+      });
+      bubble.textContent = res.text;
+      aiTurns.push({role:'assistant', content: res.text});
+    }catch(e){
+      if(e && e.text){ bubble.textContent = e.text; }
+      else {
+        let msg = "Kechirasiz, javob olishda xatolik yuz berdi.";
+        if(e && e.code==='not_granted') msg = "AI yordamchidan foydalanish uchun ruxsat berilmadi.";
+        if(e && e.code==='rate_limited') msg = "Hozircha juda ko'p so'rov yuborildi, biroz kutib qaytadan urinib ko'ring.";
+        bubble.textContent = msg;
+      }
+    } finally {
+      aiBusy = false;
+      aiSendBtn.disabled = false;
+    }
+    aiBody.scrollTop = aiBody.scrollHeight;
   }
 
   /* ---------------- Data: users ---------------- */
@@ -760,12 +975,16 @@
   }
 
   /* ---------------- Navigation ---------------- */
-  const views = ['home','topics','difficulty','test','result','history','contact','about'];
+  const views = ['home','topics','difficulty','test','result','history','history-detail','profile','contact','about'];
   function showView(name){
     views.forEach(v=>{
       document.getElementById('view-'+v).classList.toggle('hidden', v!==name);
     });
     document.getElementById('menuBtn').classList.toggle('hidden', name==='test');
+    if(sampleFn){
+      document.getElementById('aiFab').classList.toggle('hidden', name==='test' || name==='auth');
+    }
+    if(name==='test') closeAIChat();
     closeSidebar();
     window.scrollTo(0,0);
   }
@@ -775,6 +994,7 @@
       const target = this.getAttribute('data-nav');
       if(target==='topics') renderTopics();
       if(target==='history') renderHistory();
+      if(target==='profile') renderProfile();
       showView(target);
     });
   });
@@ -1021,7 +1241,14 @@
           topic: TOPICS.find(t=>t.id===testState.topicId).name,
           level: LEVEL_NAMES[testState.level],
           correct, wrong, pct, spent,
-          date: new Date().toLocaleString('uz-UZ')
+          date: new Date().toLocaleString('uz-UZ'),
+          questions: testState.questions.map(q=>({
+            text: q.text,
+            options: q.options,
+            correctIndex: q.correctIndex,
+            selected: q.selected,
+            solution: q.solution
+          }))
         });
         updateUser(user);
       }
@@ -1029,11 +1256,11 @@
     showView('result');
   }
 
-  function renderReview(){
-    const wrap = document.getElementById('reviewList');
+  function renderReviewInto(containerId, questions){
+    const wrap = document.getElementById(containerId);
     wrap.innerHTML = '';
-    testState.questions.forEach((q,i)=>{
-      const answered = q.selected !== null;
+    questions.forEach((q,i)=>{
+      const answered = q.selected !== null && q.selected !== undefined;
       const isCorrect = answered && q.selected === q.correctIndex;
       const status = !answered ? 'skip' : (isCorrect ? 'ok' : 'bad');
       const badgeText = !answered ? "Belgilanmagan" : (isCorrect ? "To'g'ri" : "Xato");
@@ -1062,9 +1289,20 @@
         <div class="review-q">${q.text}</div>
         ${answerLines}
         <details class="review-solution"><summary>Qanday yechiladi</summary><p>${q.solution}</p></details>
+        <div><button class="ai-helpbtn" type="button">🤖 AI'dan tushuntirishni so'rash</button></div>
       `;
+      const helpBtn = item.querySelector('.ai-helpbtn');
+      if(helpBtn){
+        helpBtn.addEventListener('click', ()=>{
+          openAIChatWithContext(q, answered, isCorrect, userAnsText, correctAnsText);
+        });
+      }
       wrap.appendChild(item);
     });
+  }
+
+  function renderReview(){
+    renderReviewInto('reviewList', testState.questions);
   }
 
   /* ---------------- History ---------------- */
@@ -1076,14 +1314,96 @@
     const user = cur ? findUserByEmail(cur.email) : null;
     const hist = (user && user.history) ? user.history : [];
     empty.classList.toggle('hidden', hist.length>0);
-    hist.forEach(h=>{
+    hist.forEach((h,idx)=>{
       const row = document.createElement('div');
       row.className='hist-row';
       row.innerHTML = `<div><div class="t">${h.topic} · ${h.level}</div><div class="d">${h.date}</div></div>
         <div style="text-align:right;"><div class="t">${h.pct}%</div><div class="d">${h.correct} to'g'ri, ${h.wrong} xato</div></div>`;
+      row.addEventListener('click', ()=>openHistoryDetail(idx));
       list.appendChild(row);
     });
   }
+
+  function openHistoryDetail(idx){
+    const cur = getCurrentUser();
+    const user = cur ? findUserByEmail(cur.email) : null;
+    if(!user || !user.history || !user.history[idx]) return;
+    const h = user.history[idx];
+    document.getElementById('histDetailTitle').textContent = h.topic + ' · ' + h.level;
+    document.getElementById('histDetailMeta').textContent = h.date;
+    document.getElementById('histDetailStats').innerHTML = `
+      <div class="stat-box ok"><div class="n">${h.correct}</div><div class="l">To'g'ri javob</div></div>
+      <div class="stat-box bad"><div class="n">${h.wrong}</div><div class="l">Xato javob</div></div>
+      <div class="stat-box"><div class="n">${h.pct}%</div><div class="l">Umumiy natija</div></div>
+    `;
+    if(h.questions && h.questions.length){
+      renderReviewInto('histReviewList', h.questions);
+    } else {
+      document.getElementById('histReviewList').innerHTML = '<p style="color:var(--ink-soft);font-size:13.5px;">Bu test uchun batafsil tahlil saqlanmagan.</p>';
+    }
+    showView('history-detail');
+  }
+
+  /* ---------------- Profile ---------------- */
+  function renderProfile(){
+    const cur = getCurrentUser();
+    const user = cur ? findUserByEmail(cur.email) : null;
+    if(!user) return;
+    document.getElementById('profIsm').value = user.ism;
+    document.getElementById('profFamiliya').value = user.familiya;
+    document.getElementById('profPhone').value = user.phone;
+    document.getElementById('profEmail').value = user.email;
+    document.getElementById('profPass').value = '';
+    hideErr('profileError'); hideErr('profileSuccess');
+
+    const hist = user.history || [];
+    const total = hist.length;
+    const avg = total ? Math.round(hist.reduce((s,h)=>s+h.pct,0)/total) : 0;
+    const best = total ? Math.max(...hist.map(h=>h.pct)) : 0;
+    document.getElementById('profileStats').innerHTML = `
+      <div class="stat-box"><div class="n">${total}</div><div class="l">Jami testlar</div></div>
+      <div class="stat-box ok"><div class="n">${avg}%</div><div class="l">O'rtacha natija</div></div>
+      <div class="stat-box ok"><div class="n">${best}%</div><div class="l">Eng yaxshi natija</div></div>
+    `;
+  }
+
+  document.getElementById('saveProfileBtn').addEventListener('click', function(){
+    hideErr('profileError'); hideErr('profileSuccess');
+    const cur = getCurrentUser();
+    const user = cur ? findUserByEmail(cur.email) : null;
+    if(!user) return;
+
+    const ism = document.getElementById('profIsm').value.trim();
+    const familiya = document.getElementById('profFamiliya').value.trim();
+    const phone = document.getElementById('profPhone').value.trim();
+    const email = document.getElementById('profEmail').value.trim().toLowerCase();
+    const newPass = document.getElementById('profPass').value;
+
+    if(!ism || !familiya || !phone || !email){
+      showErr('profileError', "Iltimos, barcha maydonlarni to'ldiring."); return;
+    }
+    const users = getUsers();
+    const clash = users.find(u=> u.email!==user.email && (u.email===email || u.phone===phone));
+    if(clash){
+      showErr('profileError', "Bu email yoki telefon raqam boshqa foydalanuvchida band."); return;
+    }
+    if(newPass && newPass.length < 4){
+      showErr('profileError', "Yangi parol kamida 4 ta belgidan iborat bo'lsin."); return;
+    }
+
+    const oldEmail = user.email;
+    user.ism = ism; user.familiya = familiya; user.phone = phone; user.email = email;
+    if(newPass) user.pass = newPass;
+
+    const list = getUsers();
+    const idx = list.findIndex(u=>u.email===oldEmail);
+    if(idx>-1){ list[idx] = user; setUsers(list); }
+    setCurrentUser({email:user.email});
+
+    document.getElementById('homeName').textContent = user.ism + ' ' + user.familiya;
+    document.getElementById('userChip').textContent = user.ism + ' ' + user.familiya;
+    showErr('profileSuccess', "Ma'lumotlar muvaffaqiyatli saqlandi.");
+  });
 
   /* ---------------- Session restore ---------------- */
   (function init(){
