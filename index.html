@@ -1,1 +1,1101 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bilim Maydoni — Matematika testlari</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F6F2E7;
+    --surface: #FFFFFF;
+    --surface-2: #EFE9D8;
+    --ink: #17233A;
+    --ink-soft: #55617A;
+    --accent: #C8922F;
+    --accent-ink: #4A3410;
+    --accent-2: #2F7B6E;
+    --danger: #AE4238;
+    --grid-line: rgba(23,35,58,0.08);
+    --border: rgba(23,35,58,0.14);
+    --shadow: 0 1px 2px rgba(23,35,58,.06);
+    --radius-s: 4px;
+    --radius-m: 10px;
+  }
+  :root:not([data-theme="light"]){
+    /* respects system dark scheme when no explicit choice */
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #0F1826;
+      --surface: #182437;
+      --surface-2: #1F2C42;
+      --ink: #ECE8DC;
+      --ink-soft: #A6B1C6;
+      --accent: #E3AC53;
+      --accent-ink: #2A1D08;
+      --accent-2: #45A395;
+      --danger: #E0827A;
+      --grid-line: rgba(236,232,220,0.06);
+      --border: rgba(236,232,220,0.14);
+      --shadow: 0 1px 3px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #0F1826;
+    --surface: #182437;
+    --surface-2: #1F2C42;
+    --ink: #ECE8DC;
+    --ink-soft: #A6B1C6;
+    --accent: #E3AC53;
+    --accent-ink: #2A1D08;
+    --accent-2: #45A395;
+    --danger: #E0827A;
+    --grid-line: rgba(236,232,220,0.06);
+    --border: rgba(236,232,220,0.14);
+    --shadow: 0 1px 3px rgba(0,0,0,.35);
+  }
 
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      repeating-linear-gradient(to bottom, transparent, transparent 27px, var(--grid-line) 28px),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    transition:background .25s ease,color .25s ease;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  button{font-family:inherit;cursor:pointer;}
+  input{font-family:inherit;}
+  .hidden{display:none !important;}
+  a{color:inherit;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 22px;
+  }
+  .icon-btn{
+    background:none;border:1px solid var(--border);
+    width:40px;height:40px;border-radius:var(--radius-s);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink);
+  }
+  .icon-btn:hover{background:var(--surface-2);}
+  .brand{
+    display:flex;align-items:center;gap:10px;
+  }
+  .brand .mark{
+    width:30px;height:30px;border-radius:50% 50% 50% 4px;
+    background:var(--accent);color:var(--accent-ink);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-weight:700;font-size:15px;
+  }
+  .brand .name{font-family:'Fraunces',serif;font-size:19px;font-weight:600;}
+  .top-right{display:flex;gap:10px;align-items:center;}
+  .userchip{
+    font-size:13px;color:var(--ink-soft);
+    padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-s);
+    display:flex;align-items:center;gap:8px;
+  }
+
+  /* ---------- Layout containers ---------- */
+  .screen{max-width:920px;margin:0 auto;padding:10px 22px 60px;}
+  .center-screen{
+    min-height:calc(100vh - 70px);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+  }
+
+  /* ---------- Auth card ---------- */
+  .authcard{
+    width:100%;max-width:420px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-m);
+    box-shadow:var(--shadow);
+    position:relative;
+    padding:34px 32px 30px;
+  }
+  .authcard::before{
+    content:"";position:absolute;top:0;right:0;width:0;height:0;
+    border-style:solid;border-width:0 26px 26px 0;
+    border-color:transparent var(--bg) transparent transparent;
+    filter:drop-shadow(-1px 1px 1px rgba(0,0,0,.08));
+  }
+  .authcard h1{font-size:26px;margin-bottom:4px;}
+  .authcard .sub{color:var(--ink-soft);font-size:14px;margin-bottom:26px;}
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;
+  }
+  .field input{
+    width:100%;padding:11px 12px;border:1px solid var(--border);
+    border-radius:var(--radius-s);background:var(--bg);color:var(--ink);
+    font-size:14.5px;outline:none;
+  }
+  .field input:focus{border-color:var(--accent);}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:11px 20px;border-radius:var(--radius-s);border:none;
+    font-size:14.5px;font-weight:600;
+  }
+  .btn-primary{background:var(--accent);color:var(--accent-ink);}
+  .btn-primary:hover{filter:brightness(1.05);}
+  .btn-block{width:100%;}
+  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--ink);}
+  .btn-outline:hover{background:var(--surface-2);}
+  .btn-ghost{background:none;border:none;color:var(--accent-2);font-weight:600;padding:4px;}
+  .switchline{margin-top:20px;font-size:13.5px;color:var(--ink-soft);text-align:center;}
+  .error-msg{
+    background:rgba(174,66,56,.1);color:var(--danger);border:1px solid rgba(174,66,56,.3);
+    padding:9px 12px;border-radius:var(--radius-s);font-size:13px;margin-bottom:14px;
+  }
+
+  /* ---------- Home ---------- */
+  .greeting{margin:18px 0 26px;}
+  .greeting .hi{color:var(--ink-soft);font-size:14px;}
+  .greeting h1{font-size:30px;margin-top:4px;}
+  .subject-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;}
+  .subject-card{
+    background:var(--surface);border:1px solid var(--border);
+    border-left:5px solid var(--accent-2);border-radius:0 var(--radius-m) var(--radius-m) 0;
+    padding:22px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .subject-card.active{cursor:pointer;}
+  .subject-card.active:hover{transform:translateX(2px);}
+  .subject-card.disabled{opacity:.5;border-left-color:var(--border);}
+  .subject-card .tag{font-size:12px;color:var(--accent-2);font-weight:600;}
+  .subject-card h3{font-size:19px;}
+  .subject-card p{margin:0;font-size:13.5px;color:var(--ink-soft);}
+
+  /* ---------- Topics ---------- */
+  .backlink{
+    display:inline-flex;align-items:center;gap:6px;color:var(--ink-soft);
+    font-size:13.5px;margin-bottom:18px;background:none;border:none;padding:0;
+  }
+  .backlink:hover{color:var(--ink);}
+  .topic-list{display:flex;flex-direction:column;gap:12px;}
+  .topic-row{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);
+    padding:18px 20px;display:flex;align-items:center;justify-content:space-between;
+    cursor:pointer;box-shadow:var(--shadow);
+  }
+  .topic-row:hover{border-color:var(--accent);}
+  .topic-row .num{
+    font-family:'Fraunces',serif;font-size:22px;color:var(--accent);width:34px;
+  }
+  .topic-row .info{flex:1;padding:0 12px;}
+  .topic-row .info h3{font-size:16.5px;}
+  .topic-row .info p{margin:2px 0 0;font-size:13px;color:var(--ink-soft);}
+  .chev{color:var(--ink-soft);}
+
+  /* ---------- Difficulty ---------- */
+  .diff-title{margin-bottom:22px;}
+  .diff-options{display:flex;flex-direction:column;gap:10px;margin-bottom:26px;}
+  .diff-opt{
+    border:1px solid var(--border);border-radius:var(--radius-m);padding:15px 16px;
+    display:flex;align-items:center;gap:12px;background:var(--surface);
+  }
+  .diff-opt input{accent-color:var(--accent);width:17px;height:17px;}
+  .diff-opt .lbl{display:flex;flex-direction:column;}
+  .diff-opt .lbl strong{font-size:14.5px;}
+  .diff-opt .lbl span{font-size:12.5px;color:var(--ink-soft);}
+  .diff-opt.checked{border-color:var(--accent);background:rgba(200,146,47,.08);}
+
+  /* ---------- Test screen ---------- */
+  .test-top{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:18px;flex-wrap:wrap;gap:10px;
+  }
+  .timer{
+    font-family:'Fraunces',serif;font-size:20px;font-weight:600;
+    padding:8px 16px;border-radius:var(--radius-s);border:1px solid var(--border);
+    background:var(--surface);
+  }
+  .timer.warn{color:var(--danger);border-color:var(--danger);}
+  .qgrid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;}
+  .qbubble{
+    width:38px;height:38px;border-radius:50%;border:1px solid var(--border);
+    background:var(--surface);color:var(--ink-soft);font-weight:600;font-size:13.5px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .qbubble.answered{background:var(--accent-2);border-color:var(--accent-2);color:#fff;}
+  .qbubble.current{outline:2px solid var(--accent);outline-offset:2px;}
+  .qcard{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);
+    padding:26px 26px 22px;box-shadow:var(--shadow);margin-bottom:20px;
+  }
+  .qcard .qnum{font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;}
+  .qcard .qtext{font-family:'Fraunces',serif;font-size:22px;margin-bottom:22px;}
+  .opts{display:flex;flex-direction:column;gap:10px;}
+  .opt{
+    border:1px solid var(--border);border-radius:var(--radius-s);padding:13px 15px;
+    display:flex;align-items:center;gap:12px;font-size:14.5px;
+  }
+  .opt:hover{border-color:var(--accent);}
+  .opt .bullet{
+    width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);
+    flex-shrink:0;
+  }
+  .opt.selected{border-color:var(--accent);background:rgba(200,146,47,.09);}
+  .opt.selected .bullet{background:var(--accent);border-color:var(--accent);}
+  .test-nav{display:flex;justify-content:space-between;gap:10px;}
+  .test-nav .side{display:flex;gap:10px;}
+
+  /* ---------- Result ---------- */
+  .result-hero{text-align:left;margin:20px 0 30px;}
+  .result-hero .pct{font-family:'Fraunces',serif;font-size:56px;line-height:1;}
+  .result-hero .verdict{color:var(--ink-soft);font-size:15px;margin-top:6px;}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:30px;}
+  .stat-box{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);
+    padding:18px;text-align:left;
+  }
+  .stat-box .n{font-family:'Fraunces',serif;font-size:26px;}
+  .stat-box .l{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  .stat-box.ok .n{color:var(--accent-2);}
+  .stat-box.bad .n{color:var(--danger);}
+
+  /* ---------- Result review list ---------- */
+  .review-title{font-size:19px;margin:6px 0 14px;}
+  .review-item{
+    background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);
+    border-radius:0 var(--radius-m) var(--radius-m) 0;padding:16px 18px;margin-bottom:12px;
+  }
+  .review-item.ok{border-left-color:var(--accent-2);}
+  .review-item.bad{border-left-color:var(--danger);}
+  .review-item.skip{border-left-color:var(--ink-soft);}
+  .review-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .review-num{font-size:12.5px;color:var(--ink-soft);}
+  .review-badge{
+    font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px;
+  }
+  .review-item.ok .review-badge{background:rgba(47,123,110,.14);color:var(--accent-2);}
+  .review-item.bad .review-badge{background:rgba(174,66,56,.12);color:var(--danger);}
+  .review-item.skip .review-badge{background:var(--surface-2);color:var(--ink-soft);}
+  .review-q{font-family:'Fraunces',serif;font-size:17px;margin-bottom:10px;}
+  .review-line{font-size:13.5px;margin-bottom:4px;color:var(--ink-soft);}
+  .review-line strong{color:var(--ink);font-weight:600;}
+  .review-line.wrong-ans strong{color:var(--danger);}
+  .review-line.right-ans strong{color:var(--accent-2);}
+  .review-solution{margin-top:10px;}
+  .review-solution summary{
+    cursor:pointer;font-size:13px;font-weight:600;color:var(--accent-2);list-style:none;
+    display:flex;align-items:center;gap:6px;
+  }
+  .review-solution summary::-webkit-details-marker{display:none;}
+  .review-solution summary::before{content:"▸";font-size:11px;}
+  .review-solution[open] summary::before{content:"▾";}
+  .review-solution p{
+    margin:8px 0 0;font-size:13.5px;line-height:1.6;color:var(--ink-soft);
+    background:var(--surface-2);padding:12px 14px;border-radius:var(--radius-s);
+  }
+
+  /* ---------- Sidebar ---------- */
+  .overlay{
+    position:fixed;inset:0;background:rgba(15,23,38,.35);
+    opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:40;
+  }
+  .overlay.show{opacity:1;pointer-events:auto;}
+  .sidebar{
+    position:fixed;top:0;left:0;bottom:0;width:280px;
+    background:var(--surface);border-right:1px solid var(--border);
+    transform:translateX(-100%);transition:transform .25s ease;z-index:50;
+    display:flex;flex-direction:column;padding:22px 0;
+  }
+  .sidebar.show{transform:translateX(0);}
+  .sidebar .sb-head{padding:0 22px 18px;border-bottom:1px solid var(--border);margin-bottom:8px;}
+  .sb-item{
+    display:flex;align-items:center;gap:12px;padding:13px 22px;
+    color:var(--ink);text-decoration:none;font-size:14.5px;background:none;border:none;
+    width:100%;text-align:left;
+  }
+  .sb-item:hover{background:var(--surface-2);}
+  .sb-item.logout{margin-top:auto;color:var(--danger);}
+
+  /* ---------- Static content pages ---------- */
+  .static-block{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);
+    padding:26px;line-height:1.65;font-size:14.5px;color:var(--ink-soft);
+  }
+  .static-block h2{color:var(--ink);font-size:22px;margin-bottom:12px;}
+  .static-block p{margin:0 0 12px;}
+
+  /* ---------- History ---------- */
+  .hist-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);
+    padding:14px 18px;margin-bottom:10px;font-size:13.5px;
+  }
+  .hist-row .t{font-weight:600;}
+  .hist-row .d{color:var(--ink-soft);font-size:12.5px;}
+
+  @media(max-width:560px){
+    .stat-grid{grid-template-columns:1fr 1fr;}
+    .result-hero .pct{font-size:42px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="brand"><div class="mark">B</div><div class="name">Bilim Maydoni</div></div>
+  </div>
+  <button class="sb-item" data-nav="home">🏛️&nbsp;&nbsp;Bo'limlar</button>
+  <button class="sb-item" data-nav="history">📝&nbsp;&nbsp;Testlarim</button>
+  <button class="sb-item" data-nav="contact">✉️&nbsp;&nbsp;Bog'lanish</button>
+  <button class="sb-item" data-nav="about">ℹ️&nbsp;&nbsp;Biz haqimizda</button>
+  <button class="sb-item logout" id="logoutBtn">↩︎&nbsp;&nbsp;Chiqish</button>
+</div>
+
+<!-- ================= AUTH ================= -->
+<div id="screen-auth">
+  <div class="topbar" style="justify-content:center;">
+    <div class="brand"><div class="mark">B</div><div class="name">Bilim Maydoni</div></div>
+  </div>
+  <div class="center-screen" style="min-height:calc(100vh - 90px);">
+
+    <div class="authcard" id="loginCard">
+      <h1>Xush kelibsiz</h1>
+      <div class="sub">Hisobingizga kiring va o'qishni davom eting</div>
+      <div class="error-msg hidden" id="loginError"></div>
+      <div class="field">
+        <label>Email yoki telefon raqam</label>
+        <input type="text" id="loginId" placeholder="masalan: 90 123 45 67">
+      </div>
+      <div class="field">
+        <label>Parol</label>
+        <input type="password" id="loginPass" placeholder="Parolingiz">
+      </div>
+      <button class="btn btn-primary btn-block" id="loginBtn">Kirish</button>
+      <div class="switchline">Hisobingiz yo'qmi? <button class="btn-ghost" id="toRegister">Ro'yxatdan o'tish</button></div>
+    </div>
+
+    <div class="authcard hidden" id="registerCard">
+      <h1>Ro'yxatdan o'tish</h1>
+      <div class="sub">Bir necha qadamda hisob yarating</div>
+      <div class="error-msg hidden" id="regError"></div>
+      <div class="field"><label>Ism</label><input type="text" id="regIsm" placeholder="Ismingiz"></div>
+      <div class="field"><label>Familiya</label><input type="text" id="regFamiliya" placeholder="Familiyangiz"></div>
+      <div class="field"><label>Telefon raqam</label><input type="text" id="regPhone" placeholder="90 123 45 67"></div>
+      <div class="field"><label>Email</label><input type="email" id="regEmail" placeholder="email@misol.com"></div>
+      <div class="field"><label>Parol</label><input type="password" id="regPass" placeholder="Kamida 4 ta belgi"></div>
+      <button class="btn btn-primary btn-block" id="registerBtn">Ro'yxatdan o'tish</button>
+      <div class="switchline">Hisobingiz bormi? <button class="btn-ghost" id="toLogin">Kirish</button></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= APP (after login) ================= -->
+<div id="screen-app" class="hidden">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="icon-btn" id="menuBtn" aria-label="Menyu">
+        <svg width="18" height="18" viewBox="0 0 18 18"><rect y="2" width="18" height="2" fill="currentColor"/><rect y="8" width="18" height="2" fill="currentColor"/><rect y="14" width="18" height="2" fill="currentColor"/></svg>
+      </button>
+      <div class="brand"><div class="mark">B</div><div class="name">Bilim Maydoni</div></div>
+    </div>
+    <div class="top-right">
+      <span class="userchip" id="userChip">Foydalanuvchi</span>
+      <button class="icon-btn" id="themeBtn" aria-label="Rejim">🌙</button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="screen" id="view-home">
+    <div class="greeting">
+      <div class="hi">Salom,</div>
+      <h1 id="homeName">Do'stim</h1>
+    </div>
+    <div class="subject-grid">
+      <div class="subject-card active" data-nav="topics">
+        <div class="tag">Faol</div>
+        <h3>Matematika</h3>
+        <p>Natural sonlar, bo'lish, tenglamalar bo'yicha testlar</p>
+      </div>
+      <div class="subject-card disabled">
+        <div class="tag">Tez orada</div>
+        <h3>Fizika</h3>
+        <p>Hozircha mavjud emas</p>
+      </div>
+      <div class="subject-card disabled">
+        <div class="tag">Tez orada</div>
+        <h3>Ingliz tili</h3>
+        <p>Hozircha mavjud emas</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPICS -->
+  <div class="screen hidden" id="view-topics">
+    <button class="backlink" data-nav="home">← Bosh menyu</button>
+    <h1 style="font-size:24px;margin-bottom:18px;">Matematika mavzulari</h1>
+    <div class="topic-list" id="topicList"></div>
+  </div>
+
+  <!-- DIFFICULTY -->
+  <div class="screen hidden" id="view-difficulty">
+    <button class="backlink" data-nav="topics">← Mavzular</button>
+    <div class="diff-title">
+      <h1 style="font-size:24px;" id="diffTopicName">Mavzu</h1>
+      <p style="color:var(--ink-soft);font-size:14px;margin-top:6px;">Darajani tanlang. Har bir testda 10 ta savol, 60 daqiqa vaqt beriladi.</p>
+    </div>
+    <div class="diff-options" id="diffOptions">
+      <label class="diff-opt" data-level="oddiy">
+        <input type="radio" name="diff" value="oddiy">
+        <span class="lbl"><strong>Sodda</strong><span>Asosiy tushunchalar, kichik sonlar</span></span>
+      </label>
+      <label class="diff-opt" data-level="orta">
+        <input type="radio" name="diff" value="orta">
+        <span class="lbl"><strong>O'rta</strong><span>Kattaroq sonlar, aralash amallar</span></span>
+      </label>
+      <label class="diff-opt" data-level="qiyin">
+        <input type="radio" name="diff" value="qiyin">
+        <span class="lbl"><strong>Qiyin</strong><span>Ko'p bosqichli va murakkab misollar</span></span>
+      </label>
+    </div>
+    <button class="btn btn-primary" id="startTestBtn">Boshlash</button>
+  </div>
+
+  <!-- TEST -->
+  <div class="screen hidden" id="view-test">
+    <div class="test-top">
+      <div>
+        <div style="font-size:13px;color:var(--ink-soft);" id="testTopicLabel">Mavzu · Daraja</div>
+      </div>
+      <div class="timer" id="timerDisplay">60:00</div>
+    </div>
+    <div class="qgrid" id="qgrid"></div>
+    <div class="qcard">
+      <div class="qnum" id="qnumLabel">1-savol / 10</div>
+      <div class="qtext" id="qtext">Savol matni</div>
+      <div class="opts" id="optsWrap"></div>
+    </div>
+    <div class="test-nav">
+      <div class="side">
+        <button class="btn btn-outline" id="prevBtn">← Oldingi</button>
+        <button class="btn btn-outline" id="nextBtn">Keyingi →</button>
+      </div>
+      <button class="btn btn-primary" id="finishBtn">Tugatish</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen hidden" id="view-result">
+    <div class="result-hero">
+      <div class="pct" id="resPct">0%</div>
+      <div class="verdict" id="resVerdict">Natija tayyor</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-box ok"><div class="n" id="resCorrect">0</div><div class="l">To'g'ri javob</div></div>
+      <div class="stat-box bad"><div class="n" id="resWrong">0</div><div class="l">Xato javob</div></div>
+      <div class="stat-box"><div class="n" id="resTime">00:00</div><div class="l">Sarflangan vaqt</div></div>
+    </div>
+    <h2 class="review-title">Savollar tahlili</h2>
+    <div id="reviewList"></div>
+    <button class="btn btn-primary" data-nav="home" style="margin-top:8px;">Bosh menyuga qaytish</button>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="screen hidden" id="view-history">
+    <button class="backlink" data-nav="home">← Bosh menyu</button>
+    <h1 style="font-size:24px;margin-bottom:18px;">Testlarim</h1>
+    <div id="historyList"></div>
+    <p id="historyEmpty" style="color:var(--ink-soft);font-size:14px;">Hali hech qanday test topshirilmagan.</p>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="screen hidden" id="view-contact">
+    <button class="backlink" data-nav="home">← Bosh menyu</button>
+    <div class="static-block">
+      <h2>Bog'lanish</h2>
+      <p>Savol yoki takliflaringiz bo'lsa, biz bilan bog'laning:</p>
+      <p>📧 info@bilimmaydoni.uz<br>📞 +998 90 000 00 00<br>📍 Toshkent shahri, O'zbekiston</p>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="screen hidden" id="view-about">
+    <button class="backlink" data-nav="home">← Bosh menyu</button>
+    <div class="static-block">
+      <h2>Biz haqimizda</h2>
+      <p>Bilim Maydoni — o'quvchilar uchun mavzular bo'yicha bilimini sinash imkonini beruvchi platforma. Har bir mavzu bo'yicha darajangizga mos test yechib, natijangizni darhol ko'rishingiz mumkin.</p>
+      <p>Hozircha platformada Matematika bo'limi faol; yaqin kelajakda boshqa fanlar ham qo'shiladi.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- Utilities ---------------- */
+  function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+  function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+  }
+  function fmtTime(sec){
+    const m=Math.floor(sec/60).toString().padStart(2,'0');
+    const s=Math.floor(sec%60).toString().padStart(2,'0');
+    return m+":"+s;
+  }
+  function loadJSON(key, fallback){
+    try{
+      const v = localStorage.getItem(key);
+      return v ? JSON.parse(v) : fallback;
+    }catch(e){ return fallback; }
+  }
+  function saveJSON(key, val){
+    try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){}
+  }
+
+  /* ---------------- Theme ---------------- */
+  const themeBtn = document.getElementById('themeBtn');
+  function applyTheme(t){
+    if(t){ document.documentElement.setAttribute('data-theme', t); }
+    else { document.documentElement.removeAttribute('data-theme'); }
+    const isDark = t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    if(themeBtn) themeBtn.textContent = isDark ? '☀️' : '🌙';
+  }
+  (function initTheme(){
+    let saved = null;
+    try{ saved = localStorage.getItem('bm_theme'); }catch(e){}
+    applyTheme(saved);
+  })();
+  if(themeBtn){
+    themeBtn.addEventListener('click', function(){
+      const cur = document.documentElement.getAttribute('data-theme');
+      const isDark = cur === 'dark' || (!cur && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      const next = isDark ? 'light' : 'dark';
+      applyTheme(next);
+      try{ localStorage.setItem('bm_theme', next); }catch(e){}
+    });
+  }
+
+  /* ---------------- Data: users ---------------- */
+  function getUsers(){ return loadJSON('bm_users', []); }
+  function setUsers(u){ saveJSON('bm_users', u); }
+  function getCurrentUser(){ return loadJSON('bm_current', null); }
+  function setCurrentUser(u){ saveJSON('bm_current', u); }
+
+  /* ---------------- Question generators ---------------- */
+  function pickDistractors(correct, pool){
+    const set = new Set([correct]);
+    let guard=0;
+    while(set.size < 4 && guard < 200){
+      guard++;
+      const cand = pool();
+      if(typeof cand === 'number' && Number.isFinite(cand)) set.add(cand);
+    }
+    // fallback in unlikely collision-heavy case
+    while(set.size < 4){ set.add(correct + set.size*3 + randInt(1,5)); }
+    return shuffle(Array.from(set)).map(String);
+  }
+
+  function makeQuestion(text, correctValue, distractorPool, solution){
+    const options = pickDistractors(correctValue, distractorPool);
+    return {
+      text: text,
+      options: options,
+      correctIndex: options.indexOf(String(correctValue)),
+      solution: solution || ''
+    };
+  }
+
+  const generators = {
+    natural: {
+      oddiy: function(){
+        const a=randInt(2,20), b=randInt(1,20);
+        const ops=['+','-']; const op = a>=b ? ops[randInt(0,1)] : '+';
+        const val = op==='+' ? a+b : a-b;
+        const solution = op==='+'
+          ? `${a} ga ${b} qo'shiladi: ${a} + ${b} = ${val}.`
+          : `${a} dan ${b} ayiriladi: ${a} − ${b} = ${val}.`;
+        return makeQuestion(`${a} ${op} ${b} = ?`, val, ()=>val+randInt(-9,9), solution);
+      },
+      orta: function(){
+        const a=randInt(11,99), b=randInt(11,99);
+        const ops=['+','-','*']; const op=ops[randInt(0,2)];
+        let val, text, solution;
+        if(op==='*'){
+          const bb=randInt(2,12); val=a*bb; text=`${a} × ${bb} = ?`;
+          solution = `${a} sonini ${bb} marta qo'shish (ko'paytirish) natijasida: ${a} × ${bb} = ${val}.`;
+        }
+        else if(op==='-' ){
+          const hi=Math.max(a,b), lo=Math.min(a,b); val=hi-lo; text=`${hi} − ${lo} = ?`;
+          solution = `${hi} dan ${lo} ayiriladi: ${hi} − ${lo} = ${val}.`;
+        }
+        else {
+          val=a+b; text=`${a} + ${b} = ?`;
+          solution = `${a} va ${b} qo'shiladi: ${a} + ${b} = ${val}.`;
+        }
+        return makeQuestion(text, val, ()=>val+randInt(-15,15), solution);
+      },
+      qiyin: function(){
+        const a=randInt(10,40), b=randInt(2,12), c=randInt(1,25);
+        const mul = a*b;
+        const val = mul+c;
+        const solution = `Amallar tartibiga ko'ra avval ko'paytirish bajariladi: ${a} × ${b} = ${mul}. So'ngra ${c} qo'shiladi: ${mul} + ${c} = ${val}.`;
+        return makeQuestion(`${a} × ${b} + ${c} = ?`, val, ()=>val+randInt(-30,30), solution);
+      }
+    },
+    qoldiq: {
+      oddiy: function(){
+        const b=randInt(2,9), a=randInt(b+1,50);
+        const q = Math.floor(a/b), val = a % b;
+        const solution = `${a} ni ${b} ga bo'lamiz: to'liq bo'linuvchi qism ${b} × ${q} = ${b*q}, undan ortgan qoldiq esa ${a} − ${b*q} = ${val}.`;
+        return makeQuestion(`${a} ni ${b} ga bo'lganda qolgan qoldiqni toping.`, val, ()=>randInt(0,b-1), solution);
+      },
+      orta: function(){
+        const b=randInt(2,20), a=randInt(b+1,200);
+        const q = Math.floor(a/b), val = a % b;
+        const solution = `${a} ni ${b} ga bo'lamiz: to'liq bo'linuvchi qism ${b} × ${q} = ${b*q}, undan ortgan qoldiq esa ${a} − ${b*q} = ${val}.`;
+        return makeQuestion(`${a} ni ${b} ga bo'lganda qolgan qoldiqni toping.`, val, ()=>randInt(0,b-1), solution);
+      },
+      qiyin: function(){
+        const b=randInt(7,37), a=randInt(b+1,999);
+        const q = Math.floor(a/b), val = a % b;
+        const solution = `${a} ni ${b} ga bo'lamiz: to'liq bo'linuvchi qism ${b} × ${q} = ${b*q}, undan ortgan qoldiq esa ${a} − ${b*q} = ${val}.`;
+        return makeQuestion(`${a} ni ${b} ga bo'lganda qolgan qoldiqni toping.`, val, ()=>randInt(0,b-1), solution);
+      }
+    },
+    chiziqli: {
+      oddiy: function(){
+        const x=randInt(1,20), b=randInt(1,20);
+        const c=x+b;
+        const solution = `Ikkala tomondan ${b} ayiramiz: x = ${c} − ${b} = ${x}.`;
+        return makeQuestion(`x + ${b} = ${c} tenglamada x ni toping.`, x, ()=>x+randInt(-6,6), solution);
+      },
+      orta: function(){
+        const a=randInt(2,9), x=randInt(1,15), b=randInt(1,30);
+        const c=a*x+b;
+        const diff = c-b;
+        const solution = `Avval ${b} ni o'ng tomonga o'tkazamiz: ${a}x = ${c} − ${b} = ${diff}. So'ngra ikkala tomonni ${a} ga bo'lamiz: x = ${diff} ÷ ${a} = ${x}.`;
+        return makeQuestion(`${a}x + ${b} = ${c} tenglamada x ni toping.`, x, ()=>x+randInt(-6,6), solution);
+      },
+      qiyin: function(){
+        let a,d,x;
+        do{ a=randInt(2,9); d=randInt(1,8); x=randInt(-10,15); }while(a===d || x===0);
+        const b=randInt(1,30), e = (a-d)*x + b;
+        const coefDiff = a-d, rightDiff = e-b;
+        const solution = `x qatnashgan hadlarni chap tomonga, sonlarni o'ng tomonga o'tkazamiz: (${a}−${d})x = ${e}−${b}, ya'ni ${coefDiff}x = ${rightDiff}. Ikkala tomonni ${coefDiff} ga bo'lamiz: x = ${rightDiff} ÷ ${coefDiff} = ${x}.`;
+        return makeQuestion(`${a}x + ${b} = ${d}x + ${e} tenglamada x ni toping.`, x, ()=>x+randInt(-6,6), solution);
+      }
+    },
+    kvadrat: {
+      oddiy: function(){
+        let r1,r2;
+        do{ r1=randInt(-9,9); r2=randInt(-9,9); }while(r1===r2);
+        const lo=Math.min(r1,r2), hi=Math.max(r1,r2);
+        const b = -(r1+r2), c = r1*r2;
+        const bStr = b>=0? `+ ${b}x` : `− ${Math.abs(b)}x`;
+        const cStr = c>=0? `+ ${c}` : `− ${Math.abs(c)}`;
+        const signLo = lo>=0? `− ${lo}`:`+ ${Math.abs(lo)}`;
+        const signHi = hi>=0? `− ${hi}`:`+ ${Math.abs(hi)}`;
+        const solution = `Tenglama ko'paytuvchilarga ajratiladi: (x ${signLo})(x ${signHi}) = 0. Demak ildizlar x₁ = ${lo} va x₂ = ${hi}, kichigi esa ${lo}.`;
+        return makeQuestion(`x² ${bStr} ${cStr} = 0 tenglamaning kichik ildizini toping.`, lo, ()=>lo+randInt(-4,4), solution);
+      },
+      orta: function(){
+        let r1,r2;
+        do{ r1=randInt(-15,15); r2=randInt(-15,15); }while(r1===r2);
+        const lo=Math.min(r1,r2), hi=Math.max(r1,r2);
+        const b = -(r1+r2), c = r1*r2;
+        const bStr = b>=0? `+ ${b}x` : `− ${Math.abs(b)}x`;
+        const cStr = c>=0? `+ ${c}` : `− ${Math.abs(c)}`;
+        const signLo = lo>=0? `− ${lo}`:`+ ${Math.abs(lo)}`;
+        const signHi = hi>=0? `− ${hi}`:`+ ${Math.abs(hi)}`;
+        const solution = `Tenglama ko'paytuvchilarga ajratiladi: (x ${signLo})(x ${signHi}) = 0. Demak ildizlar x₁ = ${lo} va x₂ = ${hi}, kattasi esa ${hi}.`;
+        return makeQuestion(`x² ${bStr} ${cStr} = 0 tenglamaning katta ildizini toping.`, hi, ()=>hi+randInt(-5,5), solution);
+      },
+      qiyin: function(){
+        let a,r1,r2;
+        do{ a=randInt(2,5); r1=randInt(-8,8); r2=randInt(-8,8); }while(r1===r2);
+        const lo=Math.min(r1,r2), hi=Math.max(r1,r2);
+        const b = -a*(r1+r2), c = a*r1*r2;
+        const aStr = a===1?'':a;
+        const bStr = b>=0? `+ ${b}x` : `− ${Math.abs(b)}x`;
+        const cStr = c>=0? `+ ${c}` : `− ${Math.abs(c)}`;
+        const signLo = lo>=0? `− ${lo}`:`+ ${Math.abs(lo)}`;
+        const signHi = hi>=0? `− ${hi}`:`+ ${Math.abs(hi)}`;
+        const solution = `Bosh koeffitsient ${a} qavsdan tashqariga chiqariladi va ko'paytuvchilarga ajratiladi: ${a}(x ${signLo})(x ${signHi}) = 0. Demak ildizlar x₁ = ${lo} va x₂ = ${hi}, kichigi esa ${lo}.`;
+        return makeQuestion(`${aStr}x² ${bStr} ${cStr} = 0 tenglamaning kichik ildizini toping.`, lo, ()=>lo+randInt(-4,4), solution);
+      }
+    }
+  };
+
+  const TOPICS = [
+    {id:'natural', name:'Natural sonlar', desc:"Qo'shish, ayirish va ko'paytirish amallari"},
+    {id:'qoldiq', name:"Qoldiqli bo'lish", desc:"Bo'lishdan qolgan qoldiqni topish"},
+    {id:'chiziqli', name:'Chiziqli tenglama', desc:"ax + b = c ko'rinishidagi tenglamalar"},
+    {id:'kvadrat', name:'Kvadrat tenglama', desc:"x² ko'rinishidagi tenglama ildizlari"}
+  ];
+  const LEVEL_NAMES = {oddiy:'Sodda', orta:"O'rta", qiyin:'Qiyin'};
+
+  function generateTest(topicId, level){
+    const gen = generators[topicId][level];
+    const qs = [];
+    for(let i=0;i<10;i++){ qs.push(gen()); }
+    return qs;
+  }
+
+  /* ---------------- Navigation ---------------- */
+  const views = ['home','topics','difficulty','test','result','history','contact','about'];
+  function showView(name){
+    views.forEach(v=>{
+      document.getElementById('view-'+v).classList.toggle('hidden', v!==name);
+    });
+    document.getElementById('menuBtn').classList.toggle('hidden', name==='test');
+    closeSidebar();
+    window.scrollTo(0,0);
+  }
+
+  document.querySelectorAll('[data-nav]').forEach(el=>{
+    el.addEventListener('click', function(){
+      const target = this.getAttribute('data-nav');
+      if(target==='topics') renderTopics();
+      if(target==='history') renderHistory();
+      showView(target);
+    });
+  });
+
+  /* ---------------- Sidebar ---------------- */
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  function openSidebar(){ sidebar.classList.add('show'); overlay.classList.add('show'); }
+  function closeSidebar(){ sidebar.classList.remove('show'); overlay.classList.remove('show'); }
+  document.getElementById('menuBtn').addEventListener('click', openSidebar);
+  overlay.addEventListener('click', closeSidebar);
+
+  /* ---------------- Auth screen logic ---------------- */
+  const loginCard = document.getElementById('loginCard');
+  const registerCard = document.getElementById('registerCard');
+  document.getElementById('toRegister').addEventListener('click', ()=>{
+    loginCard.classList.add('hidden'); registerCard.classList.remove('hidden');
+  });
+  document.getElementById('toLogin').addEventListener('click', ()=>{
+    registerCard.classList.add('hidden'); loginCard.classList.remove('hidden');
+  });
+
+  function showErr(id, msg){
+    const el = document.getElementById(id);
+    el.textContent = msg; el.classList.remove('hidden');
+  }
+  function hideErr(id){ document.getElementById(id).classList.add('hidden'); }
+
+  document.getElementById('registerBtn').addEventListener('click', function(){
+    hideErr('regError');
+    const ism = document.getElementById('regIsm').value.trim();
+    const familiya = document.getElementById('regFamiliya').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const email = document.getElementById('regEmail').value.trim().toLowerCase();
+    const pass = document.getElementById('regPass').value;
+
+    if(!ism || !familiya || !phone || !email || !pass){
+      showErr('regError', "Iltimos, barcha maydonlarni to'ldiring."); return;
+    }
+    if(pass.length < 4){
+      showErr('regError', "Parol kamida 4 ta belgidan iborat bo'lsin."); return;
+    }
+    const users = getUsers();
+    if(users.some(u=>u.email===email || u.phone===phone)){
+      showErr('regError', "Bu email yoki telefon raqam allaqachon ro'yxatdan o'tgan."); return;
+    }
+    const user = {ism, familiya, phone, email, pass, history:[]};
+    users.push(user);
+    setUsers(users);
+    setCurrentUser({email:user.email});
+    enterApp(user);
+  });
+
+  document.getElementById('loginBtn').addEventListener('click', function(){
+    hideErr('loginError');
+    const id = document.getElementById('loginId').value.trim().toLowerCase();
+    const pass = document.getElementById('loginPass').value;
+    const users = getUsers();
+    const user = users.find(u=> (u.email===id || u.phone===id) && u.pass===pass);
+    if(!user){
+      showErr('loginError', "Email/telefon yoki parol noto'g'ri."); return;
+    }
+    setCurrentUser({email:user.email});
+    enterApp(user);
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', function(){
+    setCurrentUser(null);
+    document.getElementById('screen-app').classList.add('hidden');
+    document.getElementById('screen-auth').classList.remove('hidden');
+    document.getElementById('loginId').value='';
+    document.getElementById('loginPass').value='';
+  });
+
+  function findUserByEmail(email){
+    return getUsers().find(u=>u.email===email);
+  }
+  function updateUser(updated){
+    const users = getUsers();
+    const idx = users.findIndex(u=>u.email===updated.email);
+    if(idx>-1){ users[idx]=updated; setUsers(users); }
+  }
+
+  function enterApp(user){
+    document.getElementById('screen-auth').classList.add('hidden');
+    document.getElementById('screen-app').classList.remove('hidden');
+    document.getElementById('homeName').textContent = user.ism + ' ' + user.familiya;
+    document.getElementById('userChip').textContent = user.ism + ' ' + user.familiya;
+    showView('home');
+  }
+
+  /* ---------------- Topics & difficulty ---------------- */
+  let selectedTopic = null, selectedLevel = null;
+
+  function renderTopics(){
+    const list = document.getElementById('topicList');
+    list.innerHTML = '';
+    TOPICS.forEach((t,i)=>{
+      const row = document.createElement('div');
+      row.className='topic-row';
+      row.innerHTML = `<div class="num">${(i+1).toString().padStart(2,'0')}</div>
+        <div class="info"><h3>${t.name}</h3><p>${t.desc}</p></div>
+        <div class="chev">→</div>`;
+      row.addEventListener('click', ()=>{
+        selectedTopic = t.id;
+        document.getElementById('diffTopicName').textContent = t.name;
+        document.querySelectorAll('.diff-opt').forEach(o=>{o.classList.remove('checked'); o.querySelector('input').checked=false;});
+        selectedLevel = null;
+        showView('difficulty');
+      });
+      list.appendChild(row);
+    });
+  }
+
+  document.querySelectorAll('.diff-opt').forEach(opt=>{
+    opt.addEventListener('click', function(){
+      document.querySelectorAll('.diff-opt').forEach(o=>o.classList.remove('checked'));
+      this.classList.add('checked');
+      this.querySelector('input').checked = true;
+      selectedLevel = this.getAttribute('data-level');
+    });
+  });
+
+  document.getElementById('startTestBtn').addEventListener('click', function(){
+    if(!selectedLevel){ alert("Iltimos, daraja tanlang."); return; }
+    startTest(selectedTopic, selectedLevel);
+  });
+
+  /* ---------------- Test engine ---------------- */
+  let testState = null;
+  let timerInterval = null;
+
+  function startTest(topicId, level){
+    const questions = generateTest(topicId, level).map(q=>({...q, selected:null}));
+    testState = {
+      topicId, level, questions,
+      current: 0,
+      remaining: 60*60,
+      startedAt: Date.now()
+    };
+    const topicName = TOPICS.find(t=>t.id===topicId).name;
+    document.getElementById('testTopicLabel').textContent = topicName + ' · ' + LEVEL_NAMES[level];
+    renderQGrid();
+    renderQuestion();
+    showView('test');
+    clearInterval(timerInterval);
+    timerInterval = setInterval(tick, 1000);
+    updateTimerDisplay();
+  }
+
+  function tick(){
+    testState.remaining--;
+    updateTimerDisplay();
+    if(testState.remaining<=0){
+      clearInterval(timerInterval);
+      testState.remaining = 0;
+      finishTest(true);
+    }
+  }
+
+  function updateTimerDisplay(){
+    const el = document.getElementById('timerDisplay');
+    el.textContent = fmtTime(testState.remaining);
+    el.classList.toggle('warn', testState.remaining <= 60);
+  }
+
+  function renderQGrid(){
+    const grid = document.getElementById('qgrid');
+    grid.innerHTML='';
+    testState.questions.forEach((q,i)=>{
+      const b = document.createElement('div');
+      b.className = 'qbubble' + (q.selected!==null?' answered':'') + (i===testState.current?' current':'');
+      b.textContent = i+1;
+      b.style.cursor='pointer';
+      b.addEventListener('click', ()=>{ testState.current=i; renderQuestion(); renderQGrid(); });
+      grid.appendChild(b);
+    });
+  }
+
+  function renderQuestion(){
+    const q = testState.questions[testState.current];
+    document.getElementById('qnumLabel').textContent = (testState.current+1) + "-savol / 10";
+    document.getElementById('qtext').textContent = q.text;
+    const wrap = document.getElementById('optsWrap');
+    wrap.innerHTML='';
+    q.options.forEach((optText, idx)=>{
+      const div = document.createElement('div');
+      div.className = 'opt' + (q.selected===idx ? ' selected':'');
+      div.innerHTML = `<span class="bullet"></span><span>${optText}</span>`;
+      div.addEventListener('click', ()=>{
+        q.selected = idx;
+        renderQuestion();
+        renderQGrid();
+      });
+      wrap.appendChild(div);
+    });
+    document.getElementById('prevBtn').disabled = testState.current===0;
+    document.getElementById('nextBtn').disabled = testState.current===testState.questions.length-1;
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', ()=>{
+    if(testState.current>0){ testState.current--; renderQuestion(); renderQGrid(); }
+  });
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    if(testState.current<testState.questions.length-1){ testState.current++; renderQuestion(); renderQGrid(); }
+  });
+  document.getElementById('finishBtn').addEventListener('click', ()=>{
+    const unanswered = testState.questions.filter(q=>q.selected===null).length;
+    let msg = "Testni tugatmoqchimisiz?";
+    if(unanswered>0) msg = unanswered + " ta savolga javob bermadingiz. Baribir tugatilsinmi?";
+    if(confirm(msg)) finishTest(false);
+  });
+
+  function finishTest(auto){
+    clearInterval(timerInterval);
+    let correct=0, wrong=0;
+    testState.questions.forEach(q=>{
+      if(q.selected===null) wrong++;
+      else if(q.selected===q.correctIndex) correct++;
+      else wrong++;
+    });
+    const pct = Math.round((correct/testState.questions.length)*100);
+    const spent = 3600 - testState.remaining;
+
+    document.getElementById('resPct').textContent = pct + '%';
+    document.getElementById('resCorrect').textContent = correct;
+    document.getElementById('resWrong').textContent = wrong;
+    document.getElementById('resTime').textContent = fmtTime(spent);
+    let verdict = "Yaxshi urinish!";
+    if(auto) verdict = "Vaqt tugadi — test avtomatik yakunlandi.";
+    else if(pct>=80) verdict = "Ajoyib natija!";
+    else if(pct>=50) verdict = "Yomon emas, davom eting.";
+    else verdict = "Mavzuni yana takrorlab ko'ring.";
+    document.getElementById('resVerdict').textContent = verdict;
+
+    renderReview();
+
+    const cur = getCurrentUser();
+    if(cur){
+      const user = findUserByEmail(cur.email);
+      if(user){
+        user.history = user.history || [];
+        user.history.unshift({
+          topic: TOPICS.find(t=>t.id===testState.topicId).name,
+          level: LEVEL_NAMES[testState.level],
+          correct, wrong, pct, spent,
+          date: new Date().toLocaleString('uz-UZ')
+        });
+        updateUser(user);
+      }
+    }
+    showView('result');
+  }
+
+  function renderReview(){
+    const wrap = document.getElementById('reviewList');
+    wrap.innerHTML = '';
+    testState.questions.forEach((q,i)=>{
+      const answered = q.selected !== null;
+      const isCorrect = answered && q.selected === q.correctIndex;
+      const status = !answered ? 'skip' : (isCorrect ? 'ok' : 'bad');
+      const badgeText = !answered ? "Belgilanmagan" : (isCorrect ? "To'g'ri" : "Xato");
+      const userAnsText = answered ? q.options[q.selected] : '—';
+      const correctAnsText = q.options[q.correctIndex];
+
+      const item = document.createElement('div');
+      item.className = 'review-item ' + status;
+
+      let answerLines = '';
+      if(!answered){
+        answerLines = `<div class="review-line">Sizning javobingiz: <strong>belgilanmagan</strong></div>
+          <div class="review-line right-ans">To'g'ri javob: <strong>${correctAnsText}</strong></div>`;
+      } else if(isCorrect){
+        answerLines = `<div class="review-line right-ans">Sizning javobingiz: <strong>${userAnsText}</strong> — to'g'ri</div>`;
+      } else {
+        answerLines = `<div class="review-line wrong-ans">Sizning javobingiz: <strong>${userAnsText}</strong> — noto'g'ri</div>
+          <div class="review-line right-ans">To'g'ri javob: <strong>${correctAnsText}</strong></div>`;
+      }
+
+      item.innerHTML = `
+        <div class="review-head">
+          <span class="review-num">${i+1}-savol</span>
+          <span class="review-badge">${badgeText}</span>
+        </div>
+        <div class="review-q">${q.text}</div>
+        ${answerLines}
+        <details class="review-solution"><summary>Qanday yechiladi</summary><p>${q.solution}</p></details>
+      `;
+      wrap.appendChild(item);
+    });
+  }
+
+  /* ---------------- History ---------------- */
+  function renderHistory(){
+    const cur = getCurrentUser();
+    const list = document.getElementById('historyList');
+    const empty = document.getElementById('historyEmpty');
+    list.innerHTML='';
+    const user = cur ? findUserByEmail(cur.email) : null;
+    const hist = (user && user.history) ? user.history : [];
+    empty.classList.toggle('hidden', hist.length>0);
+    hist.forEach(h=>{
+      const row = document.createElement('div');
+      row.className='hist-row';
+      row.innerHTML = `<div><div class="t">${h.topic} · ${h.level}</div><div class="d">${h.date}</div></div>
+        <div style="text-align:right;"><div class="t">${h.pct}%</div><div class="d">${h.correct} to'g'ri, ${h.wrong} xato</div></div>`;
+      list.appendChild(row);
+    });
+  }
+
+  /* ---------------- Session restore ---------------- */
+  (function init(){
+    const cur = getCurrentUser();
+    if(cur){
+      const user = findUserByEmail(cur.email);
+      if(user){ enterApp(user); return; }
+    }
+    showView('home'); // harmless default for app screen (hidden anyway)
+  })();
+
+})();
+</script>
+</body>
+</html>
