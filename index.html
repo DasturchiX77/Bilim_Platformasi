@@ -390,6 +390,87 @@
   }
   .ai-helpbtn:hover{border-color:var(--accent-2);}
 
+  /* ---------- AI tutor modes ---------- */
+  .ai-modes{
+    display:flex;gap:6px;padding:10px 14px 4px;overflow-x:auto;
+    scrollbar-width:thin;
+  }
+  .ai-mode{
+    flex-shrink:0;background:var(--surface);border:1px solid var(--border);
+    color:var(--ink-soft);border-radius:20px;padding:6px 10px;font-size:11.5px;
+    cursor:pointer;transition:.15s ease;
+  }
+  .ai-mode:hover{border-color:var(--accent);}
+  .ai-mode.active{
+    background:var(--accent);border-color:var(--accent);color:var(--accent-ink);
+  }
+  .ai-typing{
+    display:inline-flex;gap:4px;align-items:center;
+  }
+  .ai-typing span{
+    width:5px;height:5px;border-radius:50%;background:currentColor;
+    animation:aiDot 1s infinite ease-in-out;
+  }
+  .ai-typing span:nth-child(2){animation-delay:.15s}
+  .ai-typing span:nth-child(3){animation-delay:.3s}
+  @keyframes aiDot{
+    0%,60%,100%{opacity:.25;transform:translateY(0)}
+    30%{opacity:1;transform:translateY(-2px)}
+  }
+
+  /* ---------- Dedicated AI Tutor page ---------- */
+  .ai-feature-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    margin-bottom:18px;
+  }
+  .ai-feature-card{
+    text-align:left;
+    border:1px solid var(--border);
+    border-radius:var(--radius-m);
+    background:var(--surface);
+    color:var(--ink);
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-height:145px;
+    box-shadow:var(--shadow);
+    transition:.16s ease;
+  }
+  .ai-feature-card:hover{
+    border-color:var(--accent);
+    transform:translateY(-2px);
+  }
+  .ai-feature-icon{font-size:28px;margin-bottom:4px;}
+  .ai-feature-card strong{font-size:15px;}
+  .ai-feature-card span:last-child{
+    color:var(--ink-soft);
+    font-size:12.5px;
+    line-height:1.45;
+  }
+  .ai-launch-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-m);
+    padding:18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+  }
+  .ai-launch-card p{
+    margin:4px 0 0;
+    color:var(--ink-soft);
+    font-size:13px;
+  }
+  .ai-main-card{border-left-color:var(--accent);}
+  @media(max-width:560px){
+    .ai-feature-grid{grid-template-columns:1fr;}
+    .ai-launch-card{align-items:stretch;flex-direction:column;}
+  }
+
   @media(max-width:560px){
     .stat-grid{grid-template-columns:1fr 1fr;}
     .result-hero .pct{font-size:42px;}
@@ -418,6 +499,12 @@
     <button class="ai-close" id="aiCloseBtn">✕</button>
   </div>
   <div class="ai-body" id="aiBody"></div>
+  <div class="ai-modes" id="aiModes">
+    <button class="ai-mode active" data-mode="normal">💬 Oddiy</button>
+    <button class="ai-mode" data-mode="simple">🧒 Sodda</button>
+    <button class="ai-mode" data-mode="steps">🪜 Bosqichma-bosqich</button>
+    <button class="ai-mode" data-mode="hint">💡 Maslahat</button>
+  </div>
   <div class="ai-inputrow">
     <textarea id="aiInput" rows="1" placeholder="Savolingizni yozing..."></textarea>
     <button class="ai-send" id="aiSendBtn">➤</button>
@@ -485,6 +572,11 @@
       <h1 id="homeName">Do'stim</h1>
     </div>
     <div class="subject-grid">
+      <div class="subject-card active ai-main-card" id="aiTutorCard" data-ai-open>
+        <div class="tag">AI Repetitor</div>
+        <h3>🤖 AI Repetitor</h3>
+        <p>Masalani yechish, xatoni tahlil qilish va mavzuni sodda tushuntirish</p>
+      </div>
       <div class="subject-card active" data-nav="topics">
         <div class="tag">Faol</div>
         <h3>Matematika</h3>
@@ -571,6 +663,74 @@
     <h2 class="review-title">Savollar tahlili</h2>
     <div id="reviewList"></div>
     <button class="btn btn-primary" data-nav="home" style="margin-top:8px;">Bosh menyuga qaytish</button>
+  </div>
+
+  <!-- AI TUTOR -->
+  <div class="screen hidden" id="view-ai">
+    <button class="backlink" data-nav="home">← Bosh menyu</button>
+
+    <div class="greeting" style="margin-bottom:18px;">
+      <div class="hi">Sun'iy intellekt yordamchisi</div>
+      <h1 style="font-size:28px;">🤖 AI Repetitor</h1>
+    </div>
+
+    <div class="ai-feature-grid">
+      <button class="ai-feature-card" data-ai-mode="normal">
+        <span class="ai-feature-icon">💬</span>
+        <strong>Savol berish</strong>
+        <span>Matematika bo'yicha istalgan savolingizni yozing.</span>
+      </button>
+
+      <button class="ai-feature-card" data-ai-mode="solve">
+        <span class="ai-feature-icon">🧮</span>
+        <strong>Masalani yechish</strong>
+        <span>Masalani yuboring va yechimni tushuntirib oling.</span>
+      </button>
+
+      <button class="ai-feature-card" data-ai-mode="steps">
+        <span class="ai-feature-icon">🪜</span>
+        <strong>Bosqichma-bosqich</strong>
+        <span>Yechimni qadamlar bilan ko'ring.</span>
+      </button>
+
+      <button class="ai-feature-card" data-ai-mode="hint">
+        <span class="ai-feature-icon">💡</span>
+        <strong>Maslahat</strong>
+        <span>Javobni darhol bermasdan yo'l-yo'riq oling.</span>
+      </button>
+
+      <button class="ai-feature-card" data-ai-mode="simple">
+        <span class="ai-feature-icon">🧒</span>
+        <strong>Sodda tushuntirish</strong>
+        <span>Mavzuni boshlang'ich darajada tushuntiring.</span>
+      </button>
+
+      <button class="ai-feature-card" data-ai-mode="error">
+        <span class="ai-feature-icon">❌</span>
+        <strong>Xatoni tahlil qilish</strong>
+        <span>Noto'g'ri yechimdagi xatoni topishga yordam beradi.</span>
+      </button>
+
+      <button class="ai-feature-card" data-ai-mode="topic">
+        <span class="ai-feature-icon">📚</span>
+        <strong>Mavzuni tushuntirish</strong>
+        <span>Istalgan matematika mavzusini tushuntirib beradi.</span>
+      </button>
+
+      <button class="ai-feature-card" data-ai-mode="practice">
+        <span class="ai-feature-icon">📝</span>
+        <strong>Amaliy mashq</strong>
+        <span>Siz uchun mashq tuzib, javobingizni tekshiradi.</span>
+      </button>
+    </div>
+
+    <div class="ai-launch-card">
+      <div>
+        <strong>AI bilan suhbatni boshlang</strong>
+        <p>Rejimni tanlang va savolingizni yozing.</p>
+      </div>
+      <button class="btn btn-primary" id="openFullAI">🤖 Boshlash</button>
+    </div>
   </div>
 
   <!-- HISTORY -->
@@ -689,7 +849,35 @@
   let sampleFn = null;
   let aiTurns = [];
   let aiBusy = false;
-  const AI_INSTRUCTIONS = "Sen 'Bilim Maydoni' ta'lim platformasidagi matematika bo'yicha do'stona AI-repetitorsiz. Faqat o'zbek tilida javob ber. Javoblaring qisqa, aniq va tushunarli bo'lsin (odatda 2-6 gap), zarur bo'lsa qadamlarga bo'lib tushuntir. O'quvchini xijolatga qo'ymay, iliq va rag'batlantiruvchi ohangda gapir. Agar savol matematikaga aloqador bo'lmasa ham, iloji boricha foydali va qisqa javob ber.";
+  let aiMode = 'normal';
+
+  const AI_MODE_PROMPTS = {
+    normal: `Oddiy rejimda tushuntir. Qisqa, aniq va tushunarli javob ber.`,
+    simple: `Sodda rejimda tushuntir. Boshlang'ich darajadagi o'quvchiga tushuntirgandek juda oddiy so'zlardan foydalan. Kerak bo'lsa kichik hayotiy misol keltir.`,
+    steps: `Bosqichma-bosqich rejimda tushuntir. Yechimni 1-qadam, 2-qadam, 3-qadam kabi alohida bosqichlarga bo'l. Har bir qadam nima uchun bajarilayotganini qisqa tushuntir.`,
+    hint: `Maslahat rejimida ishlagin. Yakuniy javobni darhol aytma. Avval o'quvchiga o'zi yechishi uchun kichik maslahat ber. O'quvchi yana so'rasa keyingi qadamni ko'rsat.`
+  };
+
+  const AI_INSTRUCTIONS = `
+Sen "Bilim Maydoni" platformasining haqiqiy matematika AI-repetitorisan.
+
+ASOSIY QOIDALAR:
+1. Faqat o'zbek tilida javob ber.
+2. O'quvchiga do'stona, sabrli va rag'batlantiruvchi munosabatda bo'l.
+3. Matematikani o'quvchi tushunadigan juda sodda tilda tushuntir.
+4. Keraksiz uzun javob yozma, lekin masalani tushunish uchun zarur qadamlarni qoldirma.
+5. O'quvchi xato qilsa, uni tanqid qilma. Xato qayerda bo'lganini ko'rsat va to'g'ri usulni tushuntir.
+6. Agar test savoli berilgan bo'lsa, savolning o'zidagi sonlar va mavjud yechimga tayan.
+7. O'quvchi "javobni aytma" yoki shunga o'xshash so'z ishlatsa, yakuniy javobni bermasdan maslahat ber.
+8. O'quvchi tushunmasa, ayni fikrni boshqa usul bilan qayta tushuntir.
+9. Javoblarda o'zbekcha, o'qilishi oson matematik yozuvlardan foydalan.
+10. Maqsad faqat javobni aytish emas, o'quvchiga masalani o'zi yecha olishni o'rgatish.
+
+TEST SAVOLI BILAN ISHLASH:
+- O'quvchi javobi to'g'ri bo'lsa: yechimni qisqa tekshir, nima uchun to'g'ri ekanini tushuntir.
+- O'quvchi javobi noto'g'ri bo'lsa: avval xatoni aniqlashga yordam ber, keyin to'g'ri yechimni bosqichma-bosqich tushuntir.
+- O'quvchi javob bermagan bo'lsa: savolni tushuntir va yechish yo'lini ko'rsat.
+`;
 
   (async function initAI(){
     try{
@@ -711,6 +899,7 @@
   const aiSendBtn = document.getElementById('aiSendBtn');
 
   function resetAIChat(){
+    setAIMode('normal');
     aiTurns = [{role:'user', content: AI_INSTRUCTIONS}];
     aiBody.innerHTML = '';
   }
@@ -732,11 +921,34 @@
     aiBody.scrollTop = aiBody.scrollHeight;
   }
 
+  function setAIMode(mode){
+    if(!AI_MODE_PROMPTS[mode]) mode = 'normal';
+    aiMode = mode;
+    document.querySelectorAll('.ai-mode').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.mode===mode);
+    });
+  }
+
+  document.querySelectorAll('.ai-mode').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      setAIMode(btn.dataset.mode);
+      addAINote("Rejim: " + btn.textContent);
+    });
+  });
+
   function openAIChat(){
-    if(!sampleFn){ alert("AI yordamchi hozircha mavjud emas."); return; }
+    if(!sampleFn){
+      aiPanel.classList.remove('hidden');
+      if(aiTurns.length===0){
+        resetAIChat();
+        addAINote("AI xizmatini ulash uchun backend/API kerak. Interfeys tayyor.");
+      }
+      aiInput.focus();
+      return;
+    }
     if(aiTurns.length===0){
       resetAIChat();
-      addAINote("Salom! Men AI-yordamchiman. Matematikaga oid savolingizni yozing.");
+      addAINote("Salom! Men AI-repetitorman. Masalani yuboring — xohlasangiz Oddiy, Sodda, Bosqichma-bosqich yoki Maslahat rejimini tanlang.");
     }
     aiPanel.classList.remove('hidden');
     aiInput.focus();
@@ -750,11 +962,35 @@
     if(!sampleFn){ alert("AI yordamchi hozircha mavjud emas."); return; }
     resetAIChat();
     aiPanel.classList.remove('hidden');
+
     let ctxLine;
-    if(!answered) ctxLine = `O'quvchi bu savolga javob belgilamagan.`;
-    else if(isCorrect) ctxLine = `O'quvchi "${userAnsText}" javobini belgilagan va bu to'g'ri.`;
-    else ctxLine = `O'quvchi "${userAnsText}" javobini belgilagan, lekin bu noto'g'ri. To'g'ri javob: "${correctAnsText}".`;
-    const prompt = `Quyidagi matematika savoli haqida gaplashamiz:\n"${q.text}"\n${ctxLine}\nMavjud yechim: ${q.solution}\n\nO'quvchiga shu savolni yana ham sodda va tushunarli qilib, boshqacha so'zlar bilan tushuntirib ber, xatosi (agar bo'lsa) qayerda ekanini ko'rsat.`;
+    if(!answered){
+      ctxLine = `O'quvchi bu savolga javob belgilamagan.`;
+    }else if(isCorrect){
+      ctxLine = `O'quvchi "${userAnsText}" javobini belgilagan va bu to'g'ri.`;
+    }else{
+      ctxLine = `O'quvchi "${userAnsText}" javobini belgilagan, lekin bu noto'g'ri. To'g'ri javob: "${correctAnsText}".`;
+    }
+
+    const prompt = `
+Quyidagi test savoli bo'yicha o'quvchiga repetitor sifatida yordam ber:
+
+SAVOL:
+${q.text}
+
+O'QUVCHINING HOLATI:
+${ctxLine}
+
+TESTDA BERILGAN YECHIM:
+${q.solution || 'Yechim berilmagan.'}
+
+VAZIFA:
+- Avval o'quvchining holatini hisobga ol.
+- Agar javob noto'g'ri bo'lsa, xato qayerda bo'lishi mumkinligini tushuntir.
+- Keyin to'g'ri yechimni tushunarli qilib ko'rsat.
+- Tanlangan rejim qoidalariga qat'iy amal qil.
+`;
+
     sendAIMessage(prompt, true);
   }
 
@@ -780,31 +1016,48 @@
 
   async function sendAIMessage(userText, isAutoContext){
     if(!sampleFn) return;
+
+    const modeInstruction = AI_MODE_PROMPTS[aiMode] || AI_MODE_PROMPTS.normal;
+    const finalPrompt = `${modeInstruction}
+
+FOYDALANUVCHI SO'ROVI:
+${userText}`;
+
     if(!isAutoContext) addAIBubble('user', userText);
-    aiTurns.push({role:'user', content: userText});
+    aiTurns.push({role:'user', content: finalPrompt});
+
     aiBusy = true;
     aiSendBtn.disabled = true;
-    const bubble = addAIBubble('assistant', "Yozayapti...");
+
+    const bubble = addAIBubble('assistant', '');
+    bubble.innerHTML = '<span class="ai-typing"><span></span><span></span><span></span></span>';
+
     try{
       const res = await sampleFn(aiTurns, {
         modelTier:'quick',
         cache:false,
-        onText: ({text})=>{ bubble.textContent = text; aiBody.scrollTop = aiBody.scrollHeight; }
+        onText: ({text})=>{
+          bubble.textContent = text;
+          aiBody.scrollTop = aiBody.scrollHeight;
+        }
       });
+
       bubble.textContent = res.text;
       aiTurns.push({role:'assistant', content: res.text});
     }catch(e){
-      if(e && e.text){ bubble.textContent = e.text; }
-      else {
+      if(e && e.text){
+        bubble.textContent = e.text;
+      }else{
         let msg = "Kechirasiz, javob olishda xatolik yuz berdi.";
         if(e && e.code==='not_granted') msg = "AI yordamchidan foydalanish uchun ruxsat berilmadi.";
         if(e && e.code==='rate_limited') msg = "Hozircha juda ko'p so'rov yuborildi, biroz kutib qaytadan urinib ko'ring.";
         bubble.textContent = msg;
       }
-    } finally {
+    }finally{
       aiBusy = false;
       aiSendBtn.disabled = false;
     }
+
     aiBody.scrollTop = aiBody.scrollHeight;
   }
 
@@ -975,14 +1228,16 @@
   }
 
   /* ---------------- Navigation ---------------- */
-  const views = ['home','topics','difficulty','test','result','history','history-detail','profile','contact','about'];
+  const views = ['home','topics','difficulty','test','result','history','history-detail','profile','contact','about','ai'];
   function showView(name){
     views.forEach(v=>{
       document.getElementById('view-'+v).classList.toggle('hidden', v!==name);
     });
     document.getElementById('menuBtn').classList.toggle('hidden', name==='test');
     if(sampleFn){
-      document.getElementById('aiFab').classList.toggle('hidden', name==='test' || name==='auth');
+      document.getElementById('aiFab').classList.toggle('hidden', name==='test');
+    }else{
+      document.getElementById('aiFab').classList.remove('hidden');
     }
     if(name==='test') closeAIChat();
     closeSidebar();
