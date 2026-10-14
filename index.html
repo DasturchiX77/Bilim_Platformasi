@@ -475,6 +475,41 @@
     .stat-grid{grid-template-columns:1fr 1fr;}
     .result-hero .pct{font-size:42px;}
   }
+
+
+  /* ---------------- Admin / Support ---------------- */
+  .admin-panel{max-width:1000px;margin:0 auto;}
+  .admin-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px;}
+  .admin-ticket{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .admin-ticket.new{border-left:4px solid var(--accent);}
+  .admin-ticket.answered{border-left:4px solid var(--accent-2);}
+  .ticket-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px;}
+  .ticket-title{font-weight:700;font-size:16px;color:var(--ink);}
+  .ticket-meta{font-size:12px;color:var(--ink-soft);margin-top:4px;line-height:1.6;}
+  .ticket-status{font-size:12px;padding:5px 9px;border-radius:999px;background:rgba(225,166,75,.14);color:var(--accent);white-space:nowrap;}
+  .ticket-status.answered{background:rgba(47,123,110,.12);color:var(--accent-2);}
+  .ticket-message{padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:10px;white-space:pre-wrap;line-height:1.55;font-size:14px;margin-bottom:12px;}
+  .ticket-answer{padding:12px 14px;background:rgba(47,123,110,.08);border:1px solid rgba(47,123,110,.22);border-radius:10px;white-space:pre-wrap;line-height:1.55;font-size:14px;margin-top:10px;}
+  .ticket-answer-label{font-size:12px;font-weight:700;color:var(--accent-2);margin-bottom:5px;}
+  .ticket-reply{display:flex;gap:10px;align-items:flex-end;margin-top:12px;}
+  .ticket-reply textarea{flex:1;min-height:78px;resize:vertical;padding:11px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:14px;outline:none;}
+  .ticket-reply textarea:focus{border-color:var(--accent);}
+  .ticket-reply button{min-height:42px;}
+  .support-ticket{border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:14px;background:var(--card);}
+  .support-ticket .st-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px;}
+  .support-ticket .st-subject{font-weight:700;font-size:14px;}
+  .support-ticket .st-date{font-size:11px;color:var(--ink-soft);}
+  .support-ticket .st-status{font-size:11px;padding:4px 8px;border-radius:999px;background:rgba(225,166,75,.12);color:var(--accent);}
+  .support-ticket .st-status.done{background:rgba(47,123,110,.12);color:var(--accent-2);}
+  .support-ticket .st-message{font-size:13.5px;line-height:1.55;white-space:pre-wrap;color:var(--ink);}
+  .support-ticket .st-answer{margin-top:10px;padding:10px 12px;border-radius:9px;background:rgba(47,123,110,.08);border:1px solid rgba(47,123,110,.22);font-size:13.5px;line-height:1.55;white-space:pre-wrap;}
+  .empty-admin{padding:30px 16px;text-align:center;color:var(--ink-soft);border:1px dashed var(--border);border-radius:12px;}
+  @media(max-width:620px){
+    .ticket-top{flex-direction:column;}
+    .ticket-reply{flex-direction:column;align-items:stretch;}
+    .ticket-reply button{width:100%;}
+  }
+
 </style>
 </head>
 <body>
@@ -488,6 +523,7 @@
   <button class="sb-item" data-nav="history">📝&nbsp;&nbsp;Testlarim</button>
   <button class="sb-item" data-nav="profile">👤&nbsp;&nbsp;Profil</button>
   <button class="sb-item" data-nav="contact">✉️&nbsp;&nbsp;Bog'lanish</button>
+  <button class="sb-item hidden" id="adminNavBtn" data-nav="admin">🛠️&nbsp;&nbsp;Admin panel</button>
   <button class="sb-item" data-nav="about">ℹ️&nbsp;&nbsp;Biz haqimizda</button>
   <button class="sb-item logout" id="logoutBtn">↩︎&nbsp;&nbsp;Chiqish</button>
 </div>
@@ -772,13 +808,70 @@
     </div>
   </div>
 
-  <!-- CONTACT -->
+
+
+  <!-- SUPPORT -->
   <div class="screen hidden" id="view-contact">
     <button class="backlink" data-nav="home">← Bosh menyu</button>
+
     <div class="static-block">
-      <h2>Bog'lanish</h2>
-      <p>Savol yoki takliflaringiz bo'lsa, biz bilan bog'laning:</p>
-      <p>📧 info@bilimmaydoni.uz<br>📞 +998 90 000 00 00<br>📍 Toshkent shahri, O'zbekiston</p>
+      <h2>🛠 Qo'llab-quvvatlash</h2>
+      <p>Platformada muammo yuzaga keldimi yoki savolingiz bormi? Quyidagi shakl orqali bizga yozishingiz mumkin.</p>
+
+      <div class="field">
+        <label>Murojaat mavzusi</label>
+        <select id="supportSubject" style="width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:var(--radius-s);background:var(--bg);color:var(--ink);font-size:14px;">
+          <option value="">Mavzuni tanlang</option>
+          <option value="Texnik muammo">Texnik muammo</option>
+          <option value="Test bo'yicha muammo">Test bo'yicha muammo</option>
+          <option value="AI Repetitor">AI Repetitor</option>
+          <option value="Profil">Profil</option>
+          <option value="Boshqa">Boshqa</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Murojaatingiz</label>
+        <textarea id="supportMessage" rows="6" placeholder="Muammo yoki savolingizni batafsil yozing..." style="width:100%;resize:vertical;padding:11px 12px;border:1px solid var(--border);border-radius:var(--radius-s);background:var(--bg);color:var(--ink);font-family:inherit;font-size:14px;outline:none;"></textarea>
+      </div>
+
+      <div class="error-msg hidden" id="supportError"></div>
+      <div class="error-msg hidden" id="supportSuccess" style="background:rgba(47,123,110,.1);color:var(--accent-2);border-color:rgba(47,123,110,.3);"></div>
+
+      <button class="btn btn-primary btn-block" id="sendSupportBtn">📩 Murojaat yuborish</button>
+
+      <div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--border);">
+        <h3 style="font-size:17px;margin-bottom:8px;">📨 Mening murojaatlarim</h3>
+        <div id="mySupportList"></div>
+      </div>
+
+      <div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--border);">
+        <h3 style="font-size:17px;margin-bottom:8px;">Aloqa</h3>
+        <p>📧 info@bilimmaydoni.uz<br>📞 +998 90 000 00 00<br>📍 Toshkent shahri, O'zbekiston</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="screen hidden" id="view-admin">
+    <button class="backlink" data-nav="home">← Bosh menyu</button>
+
+    <div class="admin-panel">
+      <div class="admin-head">
+        <div>
+          <div class="hi">Boshqaruv</div>
+          <h1 style="font-size:26px;">🛠 Admin panel</h1>
+        </div>
+        <button class="btn btn-outline" id="refreshAdminBtn">↻ Yangilash</button>
+      </div>
+
+      <div class="stat-grid" style="margin-bottom:20px;">
+        <div class="stat-box"><div class="n" id="adminTotalTickets">0</div><div class="l">Jami murojaatlar</div></div>
+        <div class="stat-box bad"><div class="n" id="adminNewTickets">0</div><div class="l">Javobsiz</div></div>
+        <div class="stat-box ok"><div class="n" id="adminAnsweredTickets">0</div><div class="l">Javob berilgan</div></div>
+      </div>
+
+      <div id="adminTicketList"></div>
     </div>
   </div>
 
@@ -846,6 +939,7 @@
   }
 
   /* ---------------- AI Yordamchi ---------------- */
+
   let sampleFn = null;
   let aiTurns = [];
   let aiBusy = false;
@@ -877,103 +971,369 @@ TEST SAVOLI BILAN ISHLASH:
 - O'quvchi javobi to'g'ri bo'lsa: yechimni qisqa tekshir, nima uchun to'g'ri ekanini tushuntir.
 - O'quvchi javobi noto'g'ri bo'lsa: avval xatoni aniqlashga yordam ber, keyin to'g'ri yechimni bosqichma-bosqich tushuntir.
 - O'quvchi javob bermagan bo'lsa: savolni tushuntir va yechish yo'lini ko'rsat.
-`;
+  `;
 
-  (async function initAI(){
-    try{
-      sampleFn = await claude.use('sample');
-    }catch(e){ sampleFn = null; }
-    if(sampleFn){
-      const curView = views.find(v=>!document.getElementById('view-'+v).classList.contains('hidden'));
-      const appVisible = !document.getElementById('screen-app').classList.contains('hidden');
-      if(appVisible && curView && curView!=='test'){
-        document.getElementById('aiFab').classList.remove('hidden');
-      }
-    }
-  })();
 
   const aiFab = document.getElementById('aiFab');
   const aiPanel = document.getElementById('aiPanel');
   const aiBody = document.getElementById('aiBody');
   const aiInput = document.getElementById('aiInput');
   const aiSendBtn = document.getElementById('aiSendBtn');
+  const aiCloseBtn = document.getElementById('aiCloseBtn');
+
+
+  /* ---------------- AI chatni boshlash ---------------- */
 
   function resetAIChat(){
+    aiTurns = [
+      {
+        role: 'user',
+        content: AI_INSTRUCTIONS
+      }
+    ];
+
+    aiBusy = false;
+
+    if(aiBody){
+      aiBody.innerHTML = '';
+    }
+
     setAIMode('normal');
-    aiTurns = [{role:'user', content: AI_INSTRUCTIONS}];
-    aiBody.innerHTML = '';
   }
 
+
+  /* ---------------- Chatga xabar qo'shish ---------------- */
+
   function addAIBubble(role, text){
+    if(!aiBody) return null;
+
     const div = document.createElement('div');
     div.className = 'ai-msg ' + role;
-    div.textContent = text;
+    div.textContent = text || '';
+
     aiBody.appendChild(div);
     aiBody.scrollTop = aiBody.scrollHeight;
+
     return div;
   }
 
+
+  /* ---------------- Chatga kichik izoh ---------------- */
+
   function addAINote(text){
+    if(!aiBody) return;
+
     const div = document.createElement('div');
     div.className = 'ai-msg note';
     div.textContent = text;
+
     aiBody.appendChild(div);
     aiBody.scrollTop = aiBody.scrollHeight;
   }
 
+
+  /* ---------------- AI rejimi ---------------- */
+
   function setAIMode(mode){
-    if(!AI_MODE_PROMPTS[mode]) mode = 'normal';
+    if(!AI_MODE_PROMPTS[mode]){
+      mode = 'normal';
+    }
+
     aiMode = mode;
-    document.querySelectorAll('.ai-mode').forEach(btn=>{
-      btn.classList.toggle('active', btn.dataset.mode===mode);
+
+    document.querySelectorAll('.ai-mode').forEach(function(btn){
+      btn.classList.toggle(
+        'active',
+        btn.dataset.mode === mode
+      );
     });
   }
 
-  document.querySelectorAll('.ai-mode').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
+
+  document.querySelectorAll('.ai-mode').forEach(function(btn){
+    btn.addEventListener('click', function(){
       setAIMode(btn.dataset.mode);
-      addAINote("Rejim: " + btn.textContent);
+      addAINote('Rejim: ' + btn.textContent.trim());
     });
   });
 
+
+  /* ---------------- AI oynasini ochish ---------------- */
+
   function openAIChat(){
-    if(!sampleFn){
-      aiPanel.classList.remove('hidden');
-      if(aiTurns.length===0){
-        resetAIChat();
-        addAINote("AI xizmatini ulash uchun backend/API kerak. Interfeys tayyor.");
-      }
-      aiInput.focus();
-      return;
-    }
-    if(aiTurns.length===0){
+    if(!aiPanel) return;
+
+    if(aiTurns.length === 0){
       resetAIChat();
-      addAINote("Salom! Men AI-repetitorman. Masalani yuboring — xohlasangiz Oddiy, Sodda, Bosqichma-bosqich yoki Maslahat rejimini tanlang.");
+
+      addAINote(
+        "Salom! Men AI-repetitorman. Masalani yuboring — " +
+        "xohlasangiz Oddiy, Sodda, Bosqichma-bosqich yoki Maslahat rejimini tanlang."
+      );
     }
+
     aiPanel.classList.remove('hidden');
-    aiInput.focus();
+
+    setTimeout(function(){
+      if(aiInput){
+        aiInput.focus();
+      }
+    }, 50);
   }
+
 
   function closeAIChat(){
-    aiPanel.classList.add('hidden');
+    if(aiPanel){
+      aiPanel.classList.add('hidden');
+    }
   }
 
-  function openAIChatWithContext(q, answered, isCorrect, userAnsText, correctAnsText){
-    if(!sampleFn){ alert("AI yordamchi hozircha mavjud emas."); return; }
-    resetAIChat();
-    aiPanel.classList.remove('hidden');
 
-    let ctxLine;
-    if(!answered){
-      ctxLine = `O'quvchi bu savolga javob belgilamagan.`;
-    }else if(isCorrect){
-      ctxLine = `O'quvchi "${userAnsText}" javobini belgilagan va bu to'g'ri.`;
-    }else{
-      ctxLine = `O'quvchi "${userAnsText}" javobini belgilagan, lekin bu noto'g'ri. To'g'ri javob: "${correctAnsText}".`;
+  if(aiFab){
+    aiFab.addEventListener('click', openAIChat);
+  }
+
+  if(aiCloseBtn){
+    aiCloseBtn.addEventListener('click', closeAIChat);
+  }
+
+
+  /* ---------------- Input balandligini avtomatik o'zgartirish ---------------- */
+
+  function autoGrow(){
+    if(!aiInput) return;
+
+    aiInput.style.height = 'auto';
+    aiInput.style.height =
+      Math.min(aiInput.scrollHeight, 80) + 'px';
+  }
+
+
+  if(aiInput){
+    aiInput.addEventListener('input', autoGrow);
+
+    aiInput.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' && !e.shiftKey){
+        e.preventDefault();
+        triggerSend();
+      }
+    });
+  }
+
+
+  if(aiSendBtn){
+    aiSendBtn.addEventListener('click', triggerSend);
+  }
+
+
+  /* ---------------- Xabar yuborish ---------------- */
+
+  function triggerSend(){
+    if(!aiInput) return;
+
+    const text = aiInput.value.trim();
+
+    if(!text) return;
+
+    if(aiBusy) return;
+
+    /*
+      MUHIM:
+      Xabar AI serverga yuborilishidan oldin
+      foydalanuvchi chatiga chiqariladi.
+      Shuning uchun backend/AI ishlamasa ham
+      "salom" oynada ko'rinadi.
+    */
+
+    aiInput.value = '';
+    autoGrow();
+
+    addAIBubble('user', text);
+
+    sendAIMessage(text, false);
+  }
+
+
+  /* ---------------- AI xabarini qayta ishlash ---------------- */
+
+  async function sendAIMessage(userText, isAutoContext){
+
+    const modeInstruction =
+      AI_MODE_PROMPTS[aiMode] ||
+      AI_MODE_PROMPTS.normal;
+
+    const finalPrompt = `${modeInstruction}
+
+FOYDALANUVCHI SO'ROVI:
+${userText}`;
+
+
+    /*
+      Test savolidan kelgan avtomatik kontekst bo'lsa,
+      u xabarni ham chatga ko'rsatamiz.
+    */
+
+    if(isAutoContext){
+      addAIBubble('user', userText);
     }
 
+
+    aiTurns.push({
+      role: 'user',
+      content: finalPrompt
+    });
+
+
+    /*
+      AI ulanmagan bo'lsa ham foydalanuvchi xabari
+      chatda qoladi. Faqat AI javobi o'rniga xabar chiqadi.
+    */
+
+    if(!sampleFn){
+      addAINote(
+        "⚠️ AI xizmati hozircha ulanmagan. " +
+        "Interfeys ishlayapti, lekin javob olish uchun backend/API kerak."
+      );
+      return;
+    }
+
+
+    aiBusy = true;
+
+    if(aiSendBtn){
+      aiSendBtn.disabled = true;
+    }
+
+
+    const bubble = addAIBubble('assistant', '');
+
+    if(bubble){
+      bubble.innerHTML =
+        '<span class="ai-typing">' +
+          '<span></span>' +
+          '<span></span>' +
+          '<span></span>' +
+        '</span>';
+    }
+
+
+    try{
+
+      const res = await sampleFn(aiTurns, {
+        modelTier: 'quick',
+        cache: false,
+
+        onText: function(data){
+          if(data && typeof data.text === 'string'){
+            if(bubble){
+              bubble.textContent = data.text;
+            }
+
+            if(aiBody){
+              aiBody.scrollTop = aiBody.scrollHeight;
+            }
+          }
+        }
+      });
+
+
+      const answer =
+        res && typeof res.text === 'string'
+          ? res.text
+          : "AI javob qaytarmadi.";
+
+
+      if(bubble){
+        bubble.textContent = answer;
+      }
+
+
+      aiTurns.push({
+        role: 'assistant',
+        content: answer
+      });
+
+
+    }catch(e){
+
+      console.error('AI XATOSI:', e);
+
+      let msg =
+        "Kechirasiz, javob olishda xatolik yuz berdi.";
+
+      if(e && e.text){
+        msg = e.text;
+      }
+
+      if(e && e.code === 'not_granted'){
+        msg =
+          "AI yordamchidan foydalanish uchun ruxsat berilmadi.";
+      }
+
+      if(e && e.code === 'rate_limited'){
+        msg =
+          "Hozircha juda ko'p so'rov yuborildi, " +
+          "biroz kutib qaytadan urinib ko'ring.";
+      }
+
+      if(bubble){
+        bubble.textContent = msg;
+      }
+
+    }finally{
+
+      aiBusy = false;
+
+      if(aiSendBtn){
+        aiSendBtn.disabled = false;
+      }
+
+      if(aiBody){
+        aiBody.scrollTop = aiBody.scrollHeight;
+      }
+    }
+  }
+
+
+  /* ---------------- Test savolidan AI ochish ---------------- */
+
+  function openAIChatWithContext(
+    q,
+    answered,
+    isCorrect,
+    userAnsText,
+    correctAnsText
+  ){
+
+    resetAIChat();
+
+    if(aiPanel){
+      aiPanel.classList.remove('hidden');
+    }
+
+
+    let ctxLine;
+
+    if(!answered){
+
+      ctxLine =
+        "O'quvchi bu savolga javob belgilamagan.";
+
+    }else if(isCorrect){
+
+      ctxLine =
+        `O'quvchi "${userAnsText}" javobini belgilagan va bu to'g'ri.`;
+
+    }else{
+
+      ctxLine =
+        `O'quvchi "${userAnsText}" javobini belgilagan, ` +
+        `lekin bu noto'g'ri. To'g'ri javob: "${correctAnsText}".`;
+    }
+
+
     const prompt = `
-Quyidagi test savoli bo'yicha o'quvchiga repetitor sifatida yordam ber:
+Quyidagi test savoli bo'yicha o'quvchiga repetitor sifatida yordam ber.
 
 SAVOL:
 ${q.text}
@@ -991,75 +1351,52 @@ VAZIFA:
 - Tanlangan rejim qoidalariga qat'iy amal qil.
 `;
 
+
     sendAIMessage(prompt, true);
   }
 
-  aiFab.addEventListener('click', openAIChat);
-  document.getElementById('aiCloseBtn').addEventListener('click', closeAIChat);
 
-  function autoGrow(){
-    aiInput.style.height='auto';
-    aiInput.style.height = Math.min(aiInput.scrollHeight,80)+'px';
-  }
-  aiInput.addEventListener('input', autoGrow);
-  aiInput.addEventListener('keydown', (e)=>{
-    if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); triggerSend(); }
-  });
-  aiSendBtn.addEventListener('click', triggerSend);
+  /* ---------------- AI xizmatini ishga tushirish ---------------- */
 
-  function triggerSend(){
-    const text = aiInput.value.trim();
-    if(!text || aiBusy) return;
-    aiInput.value=''; autoGrow();
-    sendAIMessage(text, false);
-  }
-
-  async function sendAIMessage(userText, isAutoContext){
-    if(!sampleFn) return;
-
-    const modeInstruction = AI_MODE_PROMPTS[aiMode] || AI_MODE_PROMPTS.normal;
-    const finalPrompt = `${modeInstruction}
-
-FOYDALANUVCHI SO'ROVI:
-${userText}`;
-
-    if(!isAutoContext) addAIBubble('user', userText);
-    aiTurns.push({role:'user', content: finalPrompt});
-
-    aiBusy = true;
-    aiSendBtn.disabled = true;
-
-    const bubble = addAIBubble('assistant', '');
-    bubble.innerHTML = '<span class="ai-typing"><span></span><span></span><span></span></span>';
+  (async function initAI(){
 
     try{
-      const res = await sampleFn(aiTurns, {
-        modelTier:'quick',
-        cache:false,
-        onText: ({text})=>{
-          bubble.textContent = text;
-          aiBody.scrollTop = aiBody.scrollHeight;
-        }
-      });
 
-      bubble.textContent = res.text;
-      aiTurns.push({role:'assistant', content: res.text});
-    }catch(e){
-      if(e && e.text){
-        bubble.textContent = e.text;
-      }else{
-        let msg = "Kechirasiz, javob olishda xatolik yuz berdi.";
-        if(e && e.code==='not_granted') msg = "AI yordamchidan foydalanish uchun ruxsat berilmadi.";
-        if(e && e.code==='rate_limited') msg = "Hozircha juda ko'p so'rov yuborildi, biroz kutib qaytadan urinib ko'ring.";
-        bubble.textContent = msg;
+      /*
+        Platformada claude.use mavjud bo'lsa,
+        AI xizmatidan foydalanamiz.
+      */
+
+      if(
+        typeof claude !== 'undefined' &&
+        claude &&
+        typeof claude.use === 'function'
+      ){
+
+        sampleFn = await claude.use('sample');
       }
-    }finally{
-      aiBusy = false;
-      aiSendBtn.disabled = false;
+
+    }catch(e){
+
+      console.warn(
+        'AI service mavjud emas:',
+        e
+      );
+
+      sampleFn = null;
     }
 
-    aiBody.scrollTop = aiBody.scrollHeight;
-  }
+
+    /*
+      AI tugmasini ko'rsatamiz.
+      AI backend bo'lmasa ham chat oynasi ishlaydi.
+    */
+
+    if(aiFab){
+      aiFab.classList.remove('hidden');
+    }
+
+  })();
 
   /* ---------------- Data: users ---------------- */
   function getUsers(){ return loadJSON('bm_users', []); }
@@ -1228,7 +1565,7 @@ ${userText}`;
   }
 
   /* ---------------- Navigation ---------------- */
-  const views = ['home','topics','difficulty','test','result','history','history-detail','profile','contact','about','ai'];
+  const views = ['home','topics','difficulty','test','result','history','history-detail','profile','contact','admin','about','ai'];
   function showView(name){
     views.forEach(v=>{
       document.getElementById('view-'+v).classList.toggle('hidden', v!==name);
@@ -1250,6 +1587,8 @@ ${userText}`;
       if(target==='topics') renderTopics();
       if(target==='history') renderHistory();
       if(target==='profile') renderProfile();
+      if(target==='contact') renderSupport();
+      if(target==='admin') renderAdmin();
       showView(target);
     });
   });
@@ -1305,13 +1644,62 @@ ${userText}`;
 
   document.getElementById('loginBtn').addEventListener('click', function(){
     hideErr('loginError');
-    const id = document.getElementById('loginId').value.trim().toLowerCase();
+
+    const rawId = document.getElementById('loginId').value.trim();
+    const id = rawId.toLowerCase();
     const pass = document.getElementById('loginPass').value;
-    const users = getUsers();
-    const user = users.find(u=> (u.email===id || u.phone===id) && u.pass===pass);
-    if(!user){
-      showErr('loginError', "Email/telefon yoki parol noto'g'ri."); return;
+
+    /* Admin hisobini maxsus telefon raqami orqali aniqlash. */
+    if(normalizePhone(rawId) === ADMIN_PHONE){
+      if(pass !== ADMIN_PASS){
+        showErr('loginError', "Admin paroli noto'g'ri.");
+        return;
+      }
+
+      let users = getUsers();
+      let admin = users.find(function(u){
+        return u.email === ADMIN_EMAIL;
+      });
+
+      if(!admin){
+        admin = {
+          ism: 'Admin',
+          familiya: 'Bilim Maydoni',
+          phone: ADMIN_PHONE,
+          email: ADMIN_EMAIL,
+          pass: ADMIN_PASS,
+          history: [],
+          role: 'admin'
+        };
+        users.push(admin);
+        setUsers(users);
+      }else{
+        admin.phone = ADMIN_PHONE;
+        admin.role = 'admin';
+        admin.pass = ADMIN_PASS;
+        const idx = users.findIndex(function(u){ return u.email === ADMIN_EMAIL; });
+        if(idx > -1){
+          users[idx] = admin;
+          setUsers(users);
+        }
+      }
+
+      setCurrentUser({email: ADMIN_EMAIL});
+      enterApp(admin);
+      showView('admin');
+      return;
     }
+
+    const users = getUsers();
+    const user = users.find(function(u){
+      return (u.email === id || normalizePhone(u.phone) === normalizePhone(rawId)) && u.pass === pass;
+    });
+
+    if(!user){
+      showErr('loginError', "Email/telefon yoki parol noto'g'ri.");
+      return;
+    }
+
     setCurrentUser({email:user.email});
     enterApp(user);
   });
@@ -1322,6 +1710,8 @@ ${userText}`;
     document.getElementById('screen-auth').classList.remove('hidden');
     document.getElementById('loginId').value='';
     document.getElementById('loginPass').value='';
+    const adminBtn = document.getElementById('adminNavBtn');
+    if(adminBtn) adminBtn.classList.add('hidden');
   });
 
   function findUserByEmail(email){
@@ -1338,6 +1728,12 @@ ${userText}`;
     document.getElementById('screen-app').classList.remove('hidden');
     document.getElementById('homeName').textContent = user.ism + ' ' + user.familiya;
     document.getElementById('userChip').textContent = user.ism + ' ' + user.familiya;
+
+    const adminBtn = document.getElementById('adminNavBtn');
+    if(adminBtn){
+      adminBtn.classList.toggle('hidden', !isAdminUser(user));
+    }
+
     showView('home');
   }
 
@@ -1598,6 +1994,244 @@ ${userText}`;
     }
     showView('history-detail');
   }
+
+  /* ---------------- Support / Admin ---------------- */
+
+  const ADMIN_PHONE = '+998911111111';
+  const ADMIN_EMAIL = 'admin@bilimmaydoni.uz';
+  const ADMIN_PASS = 'admin1234';
+
+  function normalizePhone(value){
+    return String(value || '').replace(/[\s\-()]/g, '');
+  }
+
+  function isAdminUser(user){
+    return !!user && normalizePhone(user.phone) === ADMIN_PHONE && user.email === ADMIN_EMAIL;
+  }
+
+  function getSupportMessages(){
+    return loadJSON('bm_support_messages', []);
+  }
+
+  function setSupportMessages(messages){
+    saveJSON('bm_support_messages', messages);
+  }
+
+  function renderSupport(){
+    const cur = getCurrentUser();
+    const list = document.getElementById('mySupportList');
+    if(!list) return;
+
+    list.innerHTML = '';
+
+    if(!cur){
+      list.innerHTML = '<div class="empty-admin">Murojaatlarni ko\'rish uchun tizimga kiring.</div>';
+      return;
+    }
+
+    const user = findUserByEmail(cur.email);
+    if(!user){
+      list.innerHTML = '<div class="empty-admin">Foydalanuvchi topilmadi.</div>';
+      return;
+    }
+
+    const tickets = getSupportMessages().filter(function(item){
+      return item.userEmail === user.email;
+    });
+
+    if(!tickets.length){
+      list.innerHTML = '<div class="empty-admin">Hozircha murojaat yubormagansiz.</div>';
+      return;
+    }
+
+    tickets.forEach(function(ticket){
+      const box = document.createElement('div');
+      box.className = 'support-ticket';
+
+      const answered = !!ticket.answer;
+
+      box.innerHTML = `
+        <div class="st-head">
+          <div>
+            <div class="st-subject">${escapeHTML(ticket.subject)}</div>
+            <div class="st-date">${escapeHTML(ticket.date || '')}</div>
+          </div>
+          <span class="st-status ${answered ? 'done' : ''}">${answered ? 'Javob berilgan' : 'Kutilmoqda'}</span>
+        </div>
+        <div class="st-message">${escapeHTML(ticket.message)}</div>
+        ${answered ? `<div class="st-answer"><strong>👨‍💼 Admin javobi:</strong><br>${escapeHTML(ticket.answer)}</div>` : '<div style="margin-top:9px;font-size:12px;color:var(--ink-soft);">Admin tez orada javob beradi.</div>'}
+      `;
+
+      list.appendChild(box);
+    });
+  }
+
+  document.getElementById('sendSupportBtn').addEventListener('click', function(){
+    hideErr('supportError');
+    hideErr('supportSuccess');
+
+    const subject = document.getElementById('supportSubject').value;
+    const message = document.getElementById('supportMessage').value.trim();
+    const current = getCurrentUser();
+
+    if(!current){
+      showErr('supportError', 'Murojaat yuborish uchun tizimga kirishingiz kerak.');
+      return;
+    }
+
+    if(!subject){
+      showErr('supportError', 'Iltimos, murojaat mavzusini tanlang.');
+      return;
+    }
+
+    if(!message){
+      showErr('supportError', 'Iltimos, murojaatingizni yozing.');
+      return;
+    }
+
+    if(message.length < 10){
+      showErr('supportError', 'Murojaat kamida 10 ta belgidan iborat bo\'lsin.');
+      return;
+    }
+
+    const user = findUserByEmail(current.email);
+    if(!user){
+      showErr('supportError', 'Foydalanuvchi topilmadi.');
+      return;
+    }
+
+    const messages = getSupportMessages();
+
+    messages.unshift({
+      id: Date.now(),
+      userEmail: user.email,
+      userName: user.ism + ' ' + user.familiya,
+      userPhone: user.phone,
+      subject: subject,
+      message: message,
+      status: 'Yangi',
+      date: new Date().toLocaleString('uz-UZ'),
+      answer: '',
+      answeredAt: null
+    });
+
+    setSupportMessages(messages);
+
+    document.getElementById('supportSubject').value = '';
+    document.getElementById('supportMessage').value = '';
+
+    showErr('supportSuccess', '✅ Murojaatingiz yuborildi. Admin javobini shu bo\'limdan ko\'rishingiz mumkin.');
+    renderSupport();
+  });
+
+
+  function renderAdmin(){
+    const cur = getCurrentUser();
+    const user = cur ? findUserByEmail(cur.email) : null;
+
+    if(!isAdminUser(user)){
+      showView('home');
+      return;
+    }
+
+    const list = document.getElementById('adminTicketList');
+    const tickets = getSupportMessages();
+
+    const total = tickets.length;
+    const answered = tickets.filter(function(t){ return !!t.answer; }).length;
+    const unanswered = total - answered;
+
+    document.getElementById('adminTotalTickets').textContent = total;
+    document.getElementById('adminNewTickets').textContent = unanswered;
+    document.getElementById('adminAnsweredTickets').textContent = answered;
+
+    list.innerHTML = '';
+
+    if(!tickets.length){
+      list.innerHTML = '<div class="empty-admin">📭 Hozircha foydalanuvchilardan murojaat kelmagan.</div>';
+      return;
+    }
+
+    tickets.forEach(function(ticket){
+      const box = document.createElement('div');
+      box.className = 'admin-ticket ' + (ticket.answer ? 'answered' : 'new');
+
+      const answered = !!ticket.answer;
+
+      box.innerHTML = `
+        <div class="ticket-top">
+          <div>
+            <div class="ticket-title">${escapeHTML(ticket.subject)}</div>
+            <div class="ticket-meta">
+              👤 ${escapeHTML(ticket.userName || 'Noma\'lum')}<br>
+              📞 ${escapeHTML(ticket.userPhone || '—')}<br>
+              📧 ${escapeHTML(ticket.userEmail || '—')}<br>
+              🕒 ${escapeHTML(ticket.date || '')}
+            </div>
+          </div>
+          <span class="ticket-status ${answered ? 'answered' : ''}">${answered ? 'Javob berilgan' : 'Yangi'}</span>
+        </div>
+
+        <div class="ticket-message">${escapeHTML(ticket.message)}</div>
+
+        ${answered ? `
+          <div class="ticket-answer">
+            <div class="ticket-answer-label">👨‍💼 Sizning javobingiz</div>
+            ${escapeHTML(ticket.answer)}
+            <div style="margin-top:6px;font-size:11px;color:var(--ink-soft);">${escapeHTML(ticket.answeredAt || '')}</div>
+          </div>
+        ` : ''}
+
+        <div class="ticket-reply">
+          <textarea class="admin-reply-input" data-ticket-id="${ticket.id}" placeholder="Foydalanuvchiga javob yozing...">${answered ? escapeHTML(ticket.answer) : ''}</textarea>
+          <button class="btn btn-primary admin-reply-btn" data-ticket-id="${ticket.id}">${answered ? 'Javobni yangilash' : 'Javob berish'}</button>
+        </div>
+      `;
+
+      list.appendChild(box);
+    });
+
+    list.querySelectorAll('.admin-reply-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const id = Number(btn.dataset.ticketId);
+        const textarea = list.querySelector('.admin-reply-input[data-ticket-id="' + id + '"]');
+        const answer = textarea ? textarea.value.trim() : '';
+
+        if(!answer){
+          alert('Iltimos, javob matnini yozing.');
+          return;
+        }
+
+        const all = getSupportMessages();
+        const ticket = all.find(function(item){ return Number(item.id) === id; });
+
+        if(!ticket){
+          alert('Murojaat topilmadi.');
+          return;
+        }
+
+        ticket.answer = answer;
+        ticket.status = 'Javob berildi';
+        ticket.answeredAt = new Date().toLocaleString('uz-UZ');
+
+        setSupportMessages(all);
+        renderAdmin();
+      });
+    });
+  }
+
+  function escapeHTML(value){
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  document.getElementById('refreshAdminBtn').addEventListener('click', function(){
+    renderAdmin();
+  });
 
   /* ---------------- Profile ---------------- */
   function renderProfile(){
